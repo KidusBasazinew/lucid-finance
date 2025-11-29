@@ -5,11 +5,129 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output   = "../generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+// -------------------------
+// USER & AUTHENTICATION
+// -------------------------
+model User {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  fullName     String?
+  email        String   @unique
+  phone        String?  @unique
+  passwordHash String
+  referralCode String   @unique
+  referredBy   String? // stores referralCode of the inviter
+  createdAt    DateTime @default(now())
+
+  wallet       Wallet?
+  transactions Transaction[]
+  investments  Investment[]
+  withdrawals  Withdrawal[]
+  referrals    Referral[]
+}
+
+// -------------------------
+// WALLET BALANCE
+// -------------------------
+model Wallet {
+  id            String @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String @unique @db.ObjectId
+  balance       Float  @default(0)
+  totalProfit   Float  @default(0)
+  totalInvested Float  @default(0)
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// -------------------------
+// INVESTMENT PACKAGES
+// -------------------------
+model Package {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  amount        Float
+  dailyProfit   Float
+  durationDays  Int
+  totalReturn   Float // full amount expected at the end
+  referralBonus Float // 5% or 10% etc
+  features      String[] // ["24/7 Support", "Auto Profit", etc]
+
+  createdAt   DateTime     @default(now())
+  investments Investment[]
+}
+
+// -------------------------
+// ACTIVE PURCHASED PACKAGE
+// -------------------------
+model Investment {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String @db.ObjectId
+  packageId   String @db.ObjectId
+  invested    Float
+  earned      Float  @default(0)
+  dailyProfit Float
+  daysLeft    Int
+  progress    Int    @default(0)
+  status      String @default("active") // active, completed
+
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id])
+  package Package @relation(fields: [packageId], references: [id])
+}
+
+// -------------------------
+// TRANSACTIONS
+// Dashboard Display
+// -------------------------
+model Transaction {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId String   @db.ObjectId
+  type   String // "Deposit", "Withdrawal", "Profit", "Referral Bonus"
+  amount Float
+  status String // "pending", "completed"
+  date   DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// -------------------------
+// WITHDRAWALS
+// -------------------------
+model Withdrawal {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  amount         Float
+  method         String // Bank, PayPal, Crypto, Wire
+  accountDetails String
+  notes          String?
+  txId           String
+  status         String   @default("pending") // completed, pending
+  date           DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// -------------------------
+// REFERRALS
+// -------------------------
+model Referral {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  inviterId   String   @db.ObjectId
+  invitedId   String?  @db.ObjectId
+  invitedName String?
+  earned      Float    @default(0)
+  status      String   @default("active")
+  date        DateTime @default(now())
+
+  user User @relation(fields: [inviterId], references: [id])
+}
+
