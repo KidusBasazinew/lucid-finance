@@ -21,22 +21,22 @@ const StatsCard = ({
    const getIconBgClass = () => {
       switch (variant) {
          case 'success':
-            return 'bg-success-light';
+            return 'bg-green-100';
          case 'accent':
-            return 'bg-accent-light';
+            return 'bg-orange-100';
          default:
-            return 'bg-secondary';
+            return 'bg-gray-100';
       }
    };
 
    const getIconColorClass = () => {
       switch (variant) {
          case 'success':
-            return 'text-success';
+            return 'text-green-500';
          case 'accent':
-            return 'text-accent';
+            return 'text-orange-500';
          default:
-            return 'text-primary';
+            return 'text-gray-500';
       }
    };
 
@@ -50,7 +50,7 @@ const StatsCard = ({
                </h3>
                {trend && (
                   <p
-                     className={`text-sm font-medium ${trendUp ? 'text-success' : 'text-destructive'}`}
+                     className={`text-sm font-medium ${trendUp ? 'text-green-400' : 'text-destructive'}`}
                   >
                      {trend}
                   </p>

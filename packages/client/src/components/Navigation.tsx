@@ -22,7 +22,7 @@ const Navigation = () => {
                <div className="flex items-center gap-8">
                   <NavLink to="/" className="flex items-center gap-2">
                      <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-                        <Package className="w-5 h-5 text-primary-foreground" />
+                        <Package className="w-5 h-5 text-primary" />
                      </div>
                      <span className="text-xl font-bold text-foreground">
                         VIP Invest

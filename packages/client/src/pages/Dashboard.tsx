@@ -126,7 +126,7 @@ const Dashboard = () => {
                                  </p>
                               </div>
                               <div className="text-right">
-                                 <p className="text-2xl font-bold text-success">
+                                 <p className="text-2xl font-bold text-green-400">
                                     {pkg.earned}
                                  </p>
                                  <p className="text-sm text-muted-foreground">
@@ -138,7 +138,7 @@ const Dashboard = () => {
                            <div className="grid grid-cols-2 gap-4 mb-4">
                               <div className="bg-card rounded-lg p-3">
                                  <div className="flex items-center gap-2 mb-1">
-                                    <DollarSign className="w-4 h-4 text-success" />
+                                    <DollarSign className="w-4 h-4 text-green-400" />
                                     <p className="text-xs text-muted-foreground">
                                        Daily Profit
                                     </p>
@@ -171,7 +171,7 @@ const Dashboard = () => {
                               </div>
                               <div className="h-2 bg-secondary rounded-full overflow-hidden">
                                  <div
-                                    className="h-full gradient-success transition-all duration-500"
+                                    className="h-full bg-green-400 transition-all duration-500"
                                     style={{ width: `${pkg.progress}%` }}
                                  />
                               </div>
@@ -202,21 +202,21 @@ const Dashboard = () => {
                                     className={`w-10 h-10 rounded-full flex items-center justify-center ${
                                        transaction.type.includes('Profit') ||
                                        transaction.type.includes('Bonus')
-                                          ? 'bg-success-light'
+                                          ? 'bg-green-100'
                                           : transaction.type.includes(
                                                  'Withdrawal'
                                               )
-                                            ? 'bg-accent-light'
+                                            ? 'bg-orange-100'
                                             : 'bg-primary/10'
                                     }`}
                                  >
                                     {transaction.type.includes('Profit') ||
                                     transaction.type.includes('Bonus') ? (
-                                       <TrendingUp className="w-5 h-5 text-success" />
+                                       <TrendingUp className="w-5 h-5 text-green-400" />
                                     ) : transaction.type.includes(
                                          'Withdrawal'
                                       ) ? (
-                                       <ArrowUpRight className="w-5 h-5 text-accent" />
+                                       <ArrowUpRight className="w-5 h-5 text-orange-400" />
                                     ) : (
                                        <DollarSign className="w-5 h-5 text-primary" />
                                     )}
@@ -234,7 +234,7 @@ const Dashboard = () => {
                                  <p
                                     className={`font-semibold ${
                                        transaction.amount.startsWith('+')
-                                          ? 'text-success'
+                                          ? 'text-green-400'
                                           : 'text-foreground'
                                     }`}
                                  >
@@ -243,8 +243,8 @@ const Dashboard = () => {
                                  <p
                                     className={`text-xs ${
                                        transaction.status === 'completed'
-                                          ? 'text-success'
-                                          : 'text-accent'
+                                          ? 'text-green-400'
+                                          : 'text-orange-400'
                                     }`}
                                  >
                                     {transaction.status}
@@ -264,7 +264,7 @@ const Dashboard = () => {
                      </h2>
                      <div className="space-y-3">
                         <Button
-                           className="w-full gradient-success text-success-foreground justify-between"
+                           className="w-full bg-primary text-white justify-between"
                            size="lg"
                         >
                            <span>New Investment</span>
@@ -289,7 +289,7 @@ const Dashboard = () => {
                      </div>
                   </Card>
 
-                  <Card className="p-6 shadow-custom-md bg-gradient-to-br from-primary to-primary-hover text-primary-foreground">
+                  <Card className="p-6 shadow-custom-md bg-gradient-to-br from-blue-950 to-blue-900 text-primary-foreground">
                      <h3 className="text-lg font-semibold mb-2">
                         Invite & Earn
                      </h3>

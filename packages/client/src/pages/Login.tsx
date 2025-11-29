@@ -61,10 +61,7 @@ const Login = () => {
 
                {/* Login button */}
                <Link to="/dashboard">
-                  <Button
-                     className="w-full gradient-primary text-primary-foreground shadow-custom-md"
-                     size="lg"
-                  >
+                  <Button className="w-full " size="lg">
                      Log In
                   </Button>
                </Link>

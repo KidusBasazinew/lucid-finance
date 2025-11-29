@@ -73,10 +73,7 @@ const Register = () => {
                </div>
 
                <Link to="/dashboard">
-                  <Button
-                     className="w-full gradient-success text-success-foreground"
-                     size="lg"
-                  >
+                  <Button className="w-full" size="lg">
                      Create Account
                   </Button>
                </Link>

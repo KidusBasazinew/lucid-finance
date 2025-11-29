@@ -203,8 +203,8 @@ const Profile = () => {
                {/* Sidebar */}
                <div className="space-y-6">
                   <Card className="p-6 shadow-custom-md text-center">
-                     <div className="w-24 h-24 rounded-full gradient-primary flex items-center justify-center mx-auto mb-4">
-                        <User className="w-12 h-12 text-primary-foreground" />
+                     <div className="w-24 h-24 rounded-full bg-blue-900 flex items-center justify-center mx-auto mb-4">
+                        <User className="w-12 h-12 text-white" />
                      </div>
                      <h3 className="text-xl font-semibold text-foreground mb-1">
                         John Doe
@@ -236,7 +236,7 @@ const Profile = () => {
                            <span className="text-muted-foreground">
                               VIP Status:
                            </span>
-                           <span className="font-medium text-success">
+                           <span className="font-medium text-green-400">
                               Premium
                            </span>
                         </div>
@@ -245,7 +245,9 @@ const Profile = () => {
                            <span className="text-muted-foreground">
                               Verified:
                            </span>
-                           <span className="font-medium text-success">Yes</span>
+                           <span className="font-medium text-green-400">
+                              Yes
+                           </span>
                         </div>
                      </div>
                   </Card>

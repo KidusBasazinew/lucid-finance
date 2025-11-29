@@ -55,11 +55,13 @@ const Withdraw = () => {
                         <h2 className="text-xl font-semibold text-foreground mb-4">
                            Available Balance
                         </h2>
-                        <div className="bg-gradient-to-r from-success to-success/80 rounded-xl p-6 text-success-foreground">
-                           <p className="text-sm opacity-90 mb-1">
+                        <div className="bg-gradient-to-r from-green-400 to-green-300 rounded-xl p-6 text-success-foreground">
+                           <p className="text-sm text-white opacity-90 mb-1">
                               Total Available
                            </p>
-                           <p className="text-4xl font-bold">$3,890.00</p>
+                           <p className="text-4xl font-bold text-white">
+                              $3,890.00
+                           </p>
                         </div>
                      </div>
 
@@ -119,10 +121,7 @@ const Withdraw = () => {
                            />
                         </div>
 
-                        <Button
-                           className="w-full gradient-success text-success-foreground"
-                           size="lg"
-                        >
+                        <Button className="w-full" size="lg">
                            <Wallet className="w-5 h-5 mr-2" />
                            Request Withdrawal
                         </Button>
@@ -210,9 +209,9 @@ const Withdraw = () => {
                      </div>
                   </Card>
 
-                  <Card className="p-6 shadow-custom-md bg-accent-light border-accent">
-                     <div className="flex gap-3 mb-3">
-                        <AlertCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+                  <Card className="p-6 shadow-custom-md bg-orange-50 border-orange-300">
+                     <div className="flex gap-3">
+                        <AlertCircle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
                         <h3 className="text-lg font-semibold text-foreground">
                            Important
                         </h3>
@@ -225,8 +224,8 @@ const Withdraw = () => {
                      </ul>
                   </Card>
 
-                  <Card className="p-6 shadow-custom-md gradient-primary text-primary-foreground">
-                     <h3 className="text-lg font-semibold mb-2">Need Help?</h3>
+                  <Card className="p-6 shadow-custom-md bg-blue-950 text-primary-foreground">
+                     <h3 className="text-lg font-semibold">Need Help?</h3>
                      <p className="text-sm opacity-90 mb-4">
                         Our support team is available 24/7 to assist you
                      </p>

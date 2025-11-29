@@ -182,7 +182,7 @@ const Referrals = () => {
                                  </div>
                               </div>
                               <div className="text-right">
-                                 <p className="font-semibold text-success">
+                                 <p className="font-semibold text-green-400">
                                     {user.earned}
                                  </p>
                                  <p className="text-xs text-muted-foreground">
@@ -197,7 +197,7 @@ const Referrals = () => {
 
                {/* Info Sidebar */}
                <div className="space-y-6">
-                  <Card className="p-6 shadow-custom-md gradient-primary text-primary-foreground">
+                  <Card className="p-6 shadow-custom-md bg-gradient-to-br from-blue-950 to-blue-900 text-primary-foreground">
                      <h3 className="text-lg font-semibold mb-4">
                         Commission Rates
                      </h3>
@@ -245,25 +245,25 @@ const Referrals = () => {
                      </h3>
                      <ol className="space-y-3 text-sm text-muted-foreground">
                         <li className="flex gap-2">
-                           <span className="font-bold text-primary">1.</span>
+                           <span className="font-bold text-blue-950">1.</span>
                            <span>Share your unique referral link</span>
                         </li>
                         <li className="flex gap-2">
-                           <span className="font-bold text-primary">2.</span>
+                           <span className="font-bold text-blue-950">2.</span>
                            <span>Friends sign up using your link</span>
                         </li>
                         <li className="flex gap-2">
-                           <span className="font-bold text-primary">3.</span>
+                           <span className="font-bold text-blue-950">3.</span>
                            <span>They make their first investment</span>
                         </li>
                         <li className="flex gap-2">
-                           <span className="font-bold text-primary">4.</span>
+                           <span className="font-bold text-blue-950">4.</span>
                            <span>You earn commission immediately</span>
                         </li>
                      </ol>
                   </Card>
 
-                  <Card className="p-6 shadow-custom-md bg-success-light border-success">
+                  <Card className="p-6 shadow-custom-md bg-blue-50 border border-green-400">
                      <h3 className="text-lg font-semibold text-foreground mb-2">
                         Bonus Tip
                      </h3>

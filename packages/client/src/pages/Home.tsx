@@ -96,8 +96,8 @@ const Home = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                <div className="flex justify-between items-center h-16">
                   <div className="flex items-center gap-2">
-                     <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-                        <TrendingUp className="w-5 h-5 text-primary-foreground" />
+                     <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
+                        <TrendingUp className="w-5 h-5 text-white" />
                      </div>
                      <span className="text-xl font-bold text-foreground">
                         VIP Invest
@@ -108,9 +108,7 @@ const Home = () => {
                         <Button variant="ghost">Login</Button>
                      </Link>
                      <Link to="/register">
-                        <Button className="gradient-primary text-primary-foreground">
-                           Get Started
-                        </Button>
+                        <Button className="bg-primary">Get Started</Button>
                      </Link>
                   </div>
                </div>
@@ -123,7 +121,7 @@ const Home = () => {
                <div className="text-center max-w-3xl mx-auto animate-slide-up">
                   <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
                      Invest Smart, Profit
-                     <span className="block gradient-primary bg-clip-text text-transparent">
+                     <span className="block bg-primary bg-clip-text text-transparent">
                         Daily
                      </span>
                   </h1>
@@ -136,7 +134,7 @@ const Home = () => {
                      <Link to="/register">
                         <Button
                            size="lg"
-                           className="gradient-success text-success-foreground gap-2 text-lg px-8"
+                           className="bg-green-400 text-white gap-2 text-lg px-8"
                         >
                            Start Investing Now
                            <ArrowRight className="w-5 h-5" />
@@ -151,42 +149,6 @@ const Home = () => {
                            View Packages
                         </Button>
                      </Link>
-                  </div>
-               </div>
-
-               {/* Stats */}
-               <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16 animate-fade-in">
-                  <div className="bg-card rounded-xl p-6 text-center shadow-custom-md">
-                     <div className="text-3xl font-bold text-primary mb-1">
-                        $2.5M+
-                     </div>
-                     <div className="text-sm text-muted-foreground">
-                        Total Invested
-                     </div>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 text-center shadow-custom-md">
-                     <div className="text-3xl font-bold text-success mb-1">
-                        $890K+
-                     </div>
-                     <div className="text-sm text-muted-foreground">
-                        Paid Out
-                     </div>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 text-center shadow-custom-md">
-                     <div className="text-3xl font-bold text-accent mb-1">
-                        5,200+
-                     </div>
-                     <div className="text-sm text-muted-foreground">
-                        Active Users
-                     </div>
-                  </div>
-                  <div className="bg-card rounded-xl p-6 text-center shadow-custom-md">
-                     <div className="text-3xl font-bold text-primary mb-1">
-                        98%
-                     </div>
-                     <div className="text-sm text-muted-foreground">
-                        Satisfaction
-                     </div>
                   </div>
                </div>
             </div>
