@@ -1,30 +1,30 @@
 {
-  "name": "bunfullstack",
-  "module": "index.ts",
-  "type": "module",
-  "private": true,
-  "scripts": {
-    "dev": "bun run index.ts",
-    "format": "prettier --write .",
-    "prepare": "husky"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "concurrently": "^9.2.1",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.1.6",
-    "prettier": "^3.6.2"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "workspaces": [
-    "packages/client",
-    "packages/server"
-  ],
-  "dependencies": {
-    "@prisma/client": "6.19",
-    "@types/node": "^24.10.1",
-    "prisma": "6.19"
-  }
+   "name": "bunfullstack",
+   "module": "index.ts",
+   "type": "module",
+   "private": true,
+   "scripts": {
+      "dev": "bun run index.ts",
+      "format": "prettier --write .",
+      "prepare": "husky"
+   },
+   "devDependencies": {
+      "@types/bun": "latest",
+      "concurrently": "^9.2.1",
+      "husky": "^9.1.7",
+      "lint-staged": "^16.1.6",
+      "prettier": "^3.6.2"
+   },
+   "peerDependencies": {
+      "typescript": "^5"
+   },
+   "workspaces": [
+      "packages/client",
+      "packages/server"
+   ],
+   "dependencies": {
+      "@prisma/client": "6.19",
+      "@types/node": "^24.10.1",
+      "prisma": "6.19"
+   }
 }

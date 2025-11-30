@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../generated/prisma/client"
 }
 
 datasource db {
@@ -14,120 +14,132 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// -------------------------
-// USER & AUTHENTICATION
-// -------------------------
 model User {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  fullName     String?
-  email        String   @unique
-  phone        String?  @unique
-  passwordHash String
-  referralCode String   @unique
-  referredBy   String? // stores referralCode of the inviter
-  createdAt    DateTime @default(now())
-
-  wallet       Wallet?
-  transactions Transaction[]
-  investments  Investment[]
-  withdrawals  Withdrawal[]
-  referrals    Referral[]
+  id            String        @id @default(auto())
+  phone         String        @unique
+  email         String?       @unique
+  passwordHash  String
+  firstName     String?
+  lastName      String?
+  referralCode  String        @unique
+  referredById  String?       
+  referredBy    User?         @relation("UserRefTree", fields: [referredById], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  referredUsers User[]        @relation("UserRefTree")
+  referrals     Referral[]    @relation("UserReferrals")
+  wallet        Wallet?
+  investments   Investment[]
+  transactions  Transaction[]
+  withdrawals   Withdrawal[]
+  role          Role          @default(USER)
+  status        UserStatus    @default(ACTIVE)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 }
 
-// -------------------------
-// WALLET BALANCE
-// -------------------------
 model Wallet {
-  id            String @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String @unique @db.ObjectId
-  balance       Float  @default(0)
-  totalProfit   Float  @default(0)
-  totalInvested Float  @default(0)
-
-  user User @relation(fields: [userId], references: [id])
+  id            String        @id @default(auto())
+  userId       String   @unique 
+  user         User     @relation(fields: [userId], references: [id])
+  balanceCents Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
-// -------------------------
-// INVESTMENT PACKAGES
-// -------------------------
 model Package {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  amount        Float
-  dailyProfit   Float
-  durationDays  Int
-  totalReturn   Float // full amount expected at the end
-  referralBonus Float // 5% or 10% etc
-  features      String[] // ["24/7 Support", "Auto Profit", etc]
-
-  createdAt   DateTime     @default(now())
-  investments Investment[]
+  id            String        @id @default(auto())
+  name             String
+  amountCents      Int
+  dailyProfitBps   Int
+  durationDays     Int
+  totalReturnBps   Int
+  referralBonusBps Int
+  features         String[]
+  active           Boolean      @default(true)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  investments      Investment[]
 }
 
-// -------------------------
-// ACTIVE PURCHASED PACKAGE
-// -------------------------
 model Investment {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String @db.ObjectId
-  packageId   String @db.ObjectId
-  invested    Float
-  earned      Float  @default(0)
-  dailyProfit Float
-  daysLeft    Int
-  progress    Int    @default(0)
-  status      String @default("active") // active, completed
-
-  createdAt DateTime @default(now())
-
-  user    User    @relation(fields: [userId], references: [id])
-  package Package @relation(fields: [packageId], references: [id])
+  id            String        @id @default(auto())
+  userId           String           
+  user             User             @relation(fields: [userId], references: [id])
+  packageId        String           
+  package          Package          @relation(fields: [packageId], references: [id])
+  amountCents      Int
+  dailyProfitBps   Int
+  totalReturnCents Int
+  startDate        DateTime         @default(now())
+  endDate          DateTime?
+  status           InvestmentStatus @default(ACTIVE)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
 }
 
-// -------------------------
-// TRANSACTIONS
-// Dashboard Display
-// -------------------------
 model Transaction {
-  id     String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId String   @db.ObjectId
-  type   String // "Deposit", "Withdrawal", "Profit", "Referral Bonus"
-  amount Float
-  status String // "pending", "completed"
-  date   DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id])
+  id            String        @id @default(auto())
+  userId      String            
+  user        User              @relation(fields: [userId], references: [id])
+  type        TransactionType
+  amountCents Int
+  status      TransactionStatus @default(PENDING)
+  reference   String            @unique
+  metadata    Json?
+  createdAt   DateTime          @default(now())
 }
 
-// -------------------------
-// WITHDRAWALS
-// -------------------------
 model Withdrawal {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId         String   @db.ObjectId
-  amount         Float
-  method         String // Bank, PayPal, Crypto, Wire
-  accountDetails String
-  notes          String?
-  txId           String
-  status         String   @default("pending") // completed, pending
-  date           DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id])
+  id            String        @id @default(auto())
+  userId      String           
+  user        User             @relation(fields: [userId], references: [id])
+  amountCents Int
+  status      WithdrawalStatus @default(PENDING)
+  destination String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 }
 
-// -------------------------
-// REFERRALS
-// -------------------------
 model Referral {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  inviterId   String   @db.ObjectId
-  invitedId   String?  @db.ObjectId
-  invitedName String?
-  earned      Float    @default(0)
-  status      String   @default("active")
-  date        DateTime @default(now())
-
-  user User @relation(fields: [inviterId], references: [id])
+  id            String        @id @default(auto())
+  userId         String   
+  user           User     @relation("UserReferrals", fields: [userId], references: [id])
+  referredUserId String   
+  bonusCents     Int      @default(0)
+  createdAt      DateTime @default(now())
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+}
+
+enum InvestmentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  PROFIT
+  REFERRAL
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+}
+
+enum WithdrawalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAID
+}
