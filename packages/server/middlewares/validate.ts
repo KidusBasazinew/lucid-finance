@@ -14,7 +14,8 @@ export function validate(
             errors: result.error.flatten(),
          });
       }
-      (req as any)[property] = result.data;
+      // Instead of mutating req, attach parsed data to request
+      (req as any).validatedData = result.data;
       return next();
    };
 }
