@@ -12,6 +12,7 @@ interface PackageCardProps {
    referralBonus: string;
    featured?: boolean;
    features: string[];
+   onInvest?: () => void;
 }
 
 const PackageCard = ({
@@ -23,6 +24,7 @@ const PackageCard = ({
    referralBonus,
    featured = false,
    features,
+   onInvest,
 }: PackageCardProps) => {
    return (
       <Card
@@ -40,7 +42,7 @@ const PackageCard = ({
             <h3 className="text-2xl font-bold text-foreground mb-2">{name}</h3>
             <div className="flex items-baseline gap-2">
                <span className="text-4xl font-bold text-primary">
-                  ${amount}
+                  {amount} Birr
                </span>
                <span className="text-muted-foreground">investment</span>
             </div>
@@ -73,7 +75,7 @@ const PackageCard = ({
                   Total Return
                </span>
                <span className="text-lg font-bold text-green-400">
-                  {totalReturn}
+                  {totalReturn} Birr
                </span>
             </div>
             <div className="flex justify-between items-center">
@@ -98,7 +100,7 @@ const PackageCard = ({
 
          <Button
             className={`w-full ${featured ? 'gradient-green text-green-foreground hover:opacity-90' : ''}`}
-            variant={featured ? 'default' : 'outline'}
+            onClick={onInvest}
          >
             Invest Now
          </Button>

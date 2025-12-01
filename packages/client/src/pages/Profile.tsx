@@ -4,8 +4,50 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { User, Mail, Phone, MapPin, Lock, Bell, Shield } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useMe } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 
 const Profile = () => {
+   const { data: me } = useMe();
+   const [firstName, setFirstName] = useState('');
+   const [lastName, setLastName] = useState('');
+   const [email, setEmail] = useState('');
+   const [phone, setPhone] = useState('');
+   const [address, setAddress] = useState('');
+
+   useEffect(() => {
+      if (me) {
+         setFirstName(me.firstName ?? '');
+         setLastName(me.lastName ?? '');
+         setEmail(me.email ?? '');
+         setPhone(me.phone ?? '');
+      }
+   }, [me]);
+
+   const onSaveProfile = (e: React.FormEvent) => {
+      e.preventDefault();
+      toast.info('Profile updates not supported yet.');
+   };
+
+   const onUpdatePassword = (e: React.FormEvent) => {
+      e.preventDefault();
+      toast.info('Password update not implemented yet.');
+   };
+
+   const displayName =
+      me?.firstName || me?.lastName
+         ? `${me?.firstName ?? ''} ${me?.lastName ?? ''}`.trim()
+         : me?.email || me?.phone || 'User';
+   const memberSince = me?.createdAt
+      ? new Date(me.createdAt).toLocaleDateString(undefined, {
+           month: 'short',
+           year: 'numeric',
+        })
+      : '—';
+   const verified = me?.email ? 'Yes' : 'No';
+   const roleLabel = me?.role === 'ADMIN' ? 'Admin' : 'Member';
+
    return (
       <div className="min-h-screen bg-background">
          <Navigation />
@@ -28,14 +70,15 @@ const Profile = () => {
                      <h2 className="text-xl font-semibold text-foreground mb-6">
                         Personal Information
                      </h2>
-                     <form className="space-y-5">
+                     <form className="space-y-5" onSubmit={onSaveProfile}>
                         <div className="grid md:grid-cols-2 gap-5">
                            <div>
                               <Label htmlFor="first-name">First Name</Label>
                               <Input
                                  id="first-name"
                                  type="text"
-                                 defaultValue="John"
+                                 value={firstName}
+                                 onChange={(e) => setFirstName(e.target.value)}
                                  className="mt-1.5"
                               />
                            </div>
@@ -44,7 +87,8 @@ const Profile = () => {
                               <Input
                                  id="last-name"
                                  type="text"
-                                 defaultValue="Doe"
+                                 value={lastName}
+                                 onChange={(e) => setLastName(e.target.value)}
                                  className="mt-1.5"
                               />
                            </div>
@@ -55,7 +99,8 @@ const Profile = () => {
                            <Input
                               id="email"
                               type="email"
-                              defaultValue="john.doe@example.com"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
                               className="mt-1.5"
                            />
                         </div>
@@ -65,7 +110,8 @@ const Profile = () => {
                            <Input
                               id="phone"
                               type="tel"
-                              defaultValue="+1 234 567 8900"
+                              value={phone}
+                              onChange={(e) => setPhone(e.target.value)}
                               className="mt-1.5"
                            />
                         </div>
@@ -76,6 +122,8 @@ const Profile = () => {
                               id="address"
                               type="text"
                               placeholder="123 Main St, City, Country"
+                              value={address}
+                              onChange={(e) => setAddress(e.target.value)}
                               className="mt-1.5"
                            />
                         </div>
@@ -91,7 +139,7 @@ const Profile = () => {
                      <h2 className="text-xl font-semibold text-foreground mb-6">
                         Security
                      </h2>
-                     <form className="space-y-5">
+                     <form className="space-y-5" onSubmit={onUpdatePassword}>
                         <div>
                            <Label htmlFor="current-password">
                               Current Password
@@ -207,10 +255,10 @@ const Profile = () => {
                         <User className="w-12 h-12 text-white" />
                      </div>
                      <h3 className="text-xl font-semibold text-foreground mb-1">
-                        John Doe
+                        {displayName}
                      </h3>
                      <p className="text-sm text-muted-foreground mb-4">
-                        Premium VIP Member
+                        {roleLabel}
                      </p>
                      <Button variant="outline" size="sm" className="w-full">
                         Change Avatar
@@ -228,7 +276,7 @@ const Profile = () => {
                               Member since:
                            </span>
                            <span className="font-medium text-foreground">
-                              Jan 2024
+                              {memberSince}
                            </span>
                         </div>
                         <div className="flex items-center gap-3 text-sm">
@@ -237,7 +285,7 @@ const Profile = () => {
                               VIP Status:
                            </span>
                            <span className="font-medium text-green-400">
-                              Premium
+                              {roleLabel}
                            </span>
                         </div>
                         <div className="flex items-center gap-3 text-sm">
@@ -246,7 +294,7 @@ const Profile = () => {
                               Verified:
                            </span>
                            <span className="font-medium text-green-400">
-                              Yes
+                              {verified}
                            </span>
                         </div>
                      </div>

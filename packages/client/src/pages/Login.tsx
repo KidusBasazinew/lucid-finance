@@ -2,10 +2,32 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card } from '@/components/ui/card';
-import { Link } from 'react-router';
+import { Link, useNavigate, useLocation } from 'react-router';
 import { TrendingUp } from 'lucide-react';
+import { useState } from 'react';
+import { useLogin } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 
 const Login = () => {
+   const [phone, setPhone] = useState('');
+   const [password, setPassword] = useState('');
+   const login = useLogin();
+   const navigate = useNavigate();
+   const location = useLocation() as any;
+   const from = location.state?.from?.pathname || '/dashboard';
+
+   const onSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      try {
+         await login.mutateAsync({ phone, password });
+         toast.success('Logged in');
+         navigate(from, { replace: true });
+      } catch (err: any) {
+         const msg = err?.response?.data?.message || 'Login failed';
+         toast.error(msg);
+      }
+   };
+
    return (
       <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-success/5 flex items-center justify-center p-4">
          <Card className="w-full max-w-md p-8 shadow-custom-lg animate-slide-up bg-card text-card-foreground border border-border rounded-2xl">
@@ -24,17 +46,19 @@ const Login = () => {
             </div>
 
             {/* Form */}
-            <form className="space-y-5">
-               {/* Email */}
+            <form className="space-y-5" onSubmit={onSubmit}>
+               {/* Phone */}
                <div>
-                  <Label htmlFor="email" className="text-foreground">
-                     Email Address
+                  <Label htmlFor="phone" className="text-foreground">
+                     Phone Number
                   </Label>
                   <Input
-                     id="email"
-                     type="email"
-                     placeholder="you@example.com"
+                     id="phone"
+                     type="tel"
+                     placeholder="e.g. +15551234567"
                      className="mt-1.5 bg-background border-border focus:ring-primary"
+                     value={phone}
+                     onChange={(e) => setPhone(e.target.value)}
                   />
                </div>
 
@@ -56,15 +80,20 @@ const Login = () => {
                      type="password"
                      placeholder="••••••••"
                      className="bg-background border-border focus:ring-primary"
+                     value={password}
+                     onChange={(e) => setPassword(e.target.value)}
                   />
                </div>
 
                {/* Login button */}
-               <Link to="/dashboard">
-                  <Button className="w-full " size="lg">
-                     Log In
-                  </Button>
-               </Link>
+               <Button
+                  className="w-full "
+                  size="lg"
+                  type="submit"
+                  disabled={login.isPending}
+               >
+                  {login.isPending ? 'Logging in...' : 'Log In'}
+               </Button>
             </form>
 
             {/* Footer */}

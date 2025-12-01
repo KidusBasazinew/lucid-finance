@@ -12,11 +12,19 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import StatsCard from '@/components/StatsCard';
+import { useReferrals as useReferralsHook } from '@/hooks/useReferrals';
+import { useMe } from '@/hooks/useAuth';
+import { isAuthenticated } from '@/lib/auth';
 
 const Referrals = () => {
    const [copied, setCopied] = useState(false);
-   const referralCode = 'JOHN2024VIP';
-   const referralLink = `https://vipinvest.com/register?ref=${referralCode}`;
+   const { data: me } = useMe();
+   const { data: rPage } = useReferralsHook(
+      { page: 1, limit: 20 },
+      { enabled: isAuthenticated() }
+   );
+   const referralCode = me?.referralCode || '—';
+   const referralLink = `${location.origin}/register?ref=${referralCode}`;
 
    const handleCopy = () => {
       navigator.clipboard.writeText(referralLink);
@@ -24,43 +32,18 @@ const Referrals = () => {
       setTimeout(() => setCopied(false), 2000);
    };
 
-   const referredUsers = [
-      {
-         name: 'Sarah Johnson',
-         package: 'Premium VIP',
-         earned: '$175.00',
-         date: 'Dec 20, 2024',
-         status: 'active',
-      },
-      {
-         name: 'Michael Chen',
-         package: 'Growth VIP',
-         earned: '$84.00',
-         date: 'Dec 18, 2024',
-         status: 'active',
-      },
-      {
-         name: 'Emma Wilson',
-         package: 'Elite VIP',
-         earned: '$400.00',
-         date: 'Dec 15, 2024',
-         status: 'active',
-      },
-      {
-         name: 'David Brown',
-         package: 'Starter VIP',
-         earned: '$25.00',
-         date: 'Dec 12, 2024',
-         status: 'active',
-      },
-      {
-         name: 'Lisa Anderson',
-         package: 'Premium VIP',
-         earned: '$175.00',
-         date: 'Dec 10, 2024',
-         status: 'active',
-      },
-   ];
+   const referredUsers = (rPage?.data ?? []).map((r: any) => ({
+      name: r.name || r.email || 'Referred User',
+      package: r.packageName || '—',
+      earned:
+         r.bonusCents != null
+            ? `Birr ${(r.bonusCents / 100).toLocaleString()}`
+            : 'Birr 0.00',
+      date: r.createdAt ? new Date(r.createdAt).toLocaleDateString() : '',
+      status: r.status || 'active',
+   }));
+
+   console.log(referredUsers);
 
    return (
       <div className="min-h-screen bg-background">
@@ -80,7 +63,7 @@ const Referrals = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                <StatsCard
                   title="Total Referrals"
-                  value="8"
+                  value={`${rPage?.total ?? 0}`}
                   icon={Users}
                   trend="+3 this month"
                   trendUp={true}
@@ -88,7 +71,11 @@ const Referrals = () => {
                />
                <StatsCard
                   title="Total Earned"
-                  value="$859.00"
+                  value={
+                     me?.referralEarningsCents != null
+                        ? `$${(me.referralEarningsCents / 100).toLocaleString()}`
+                        : '$0.00'
+                  }
                   icon={DollarSign}
                   trend="+$175 this week"
                   trendUp={true}
@@ -163,7 +150,7 @@ const Referrals = () => {
                      </div>
 
                      <div className="space-y-4">
-                        {referredUsers.map((user, index) => (
+                        {referredUsers.map((user: any, index: number) => (
                            <div
                               key={index}
                               className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors"

@@ -11,9 +11,17 @@ import {
    X,
 } from 'lucide-react';
 import { useState } from 'react';
+import { useLogout } from '@/hooks/useAuth';
+import { useNavigate } from 'react-router';
 
 const Navigation = () => {
    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+   const logout = useLogout();
+   const navigate = useNavigate();
+   const handleLogout = async () => {
+      await logout.mutateAsync();
+      navigate('/login');
+   };
 
    return (
       <nav className="border-b border-border bg-card sticky top-0 z-50 shadow-custom-sm">
@@ -75,12 +83,15 @@ const Navigation = () => {
                         <User className="w-4 h-4" />
                      </Button>
                   </NavLink>
-                  <NavLink to="/login">
-                     <Button variant="ghost" size="sm" className="gap-2">
-                        <LogOut className="w-4 h-4" />
-                        Logout
-                     </Button>
-                  </NavLink>
+                  <Button
+                     variant="ghost"
+                     size="sm"
+                     className="gap-2"
+                     onClick={handleLogout}
+                  >
+                     <LogOut className="w-4 h-4" />
+                     Logout
+                  </Button>
                </div>
 
                <Button
@@ -147,14 +158,16 @@ const Navigation = () => {
                         <User className="w-4 h-4" />
                         <span>Profile</span>
                      </NavLink>
-                     <NavLink
-                        to="/login"
-                        className="flex items-center gap-2 px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                        onClick={() => setMobileMenuOpen(false)}
+                     <button
+                        className="flex items-center gap-2 px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all w-full text-left"
+                        onClick={() => {
+                           setMobileMenuOpen(false);
+                           handleLogout();
+                        }}
                      >
                         <LogOut className="w-4 h-4" />
                         <span>Logout</span>
-                     </NavLink>
+                     </button>
                   </div>
                </div>
             </div>

@@ -1,6 +1,7 @@
 import { userRepository } from '../repositories/user.repository';
 import { comparePassword, hashPassword } from '../utils/password';
 import { generateReferralCode } from '../utils/referral';
+import { referralRepository } from '../repositories/referral.repository';
 import {
    signAccessToken,
    signRefreshToken,
@@ -60,6 +61,20 @@ export const authService = {
          referralCode,
          referredById,
       });
+
+      // Record referral relation for reporting if user registered using a referral code
+      if (referredById) {
+         try {
+            await referralRepository.create({
+               user: { connect: { id: referredById } },
+               referredUserId: user.id,
+               bonusCents: 25,
+            } as any);
+         } catch (e) {
+            // Swallow referral creation errors to not block registration
+            // Could be duplicate or constraint issues; not critical for user signup
+         }
+      }
 
       const accessToken = signAccessToken(user.id);
       const refreshToken = signRefreshToken(user.id);

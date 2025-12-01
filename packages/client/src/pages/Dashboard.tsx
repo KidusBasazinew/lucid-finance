@@ -11,45 +11,23 @@ import {
    Clock,
    Package,
 } from 'lucide-react';
+import { useMyWallet } from '@/hooks/useWallet';
+import { useTransactions } from '@/hooks/useTransactions';
+import { useInvestments } from '@/hooks/useInvestments';
+import { useMe } from '@/hooks/useAuth';
+import { NavLink } from 'react-router';
 
 const Dashboard = () => {
-   const recentTransactions = [
-      {
-         type: 'Profit',
-         amount: '+$45.00',
-         date: 'Today, 10:30 AM',
-         status: 'completed',
-      },
-      {
-         type: 'Withdrawal',
-         amount: '-$500.00',
-         date: 'Yesterday, 3:45 PM',
-         status: 'pending',
-      },
-      {
-         type: 'Deposit',
-         amount: '+$2,500.00',
-         date: '2 days ago',
-         status: 'completed',
-      },
-      {
-         type: 'Referral Bonus',
-         amount: '+$125.00',
-         date: '3 days ago',
-         status: 'completed',
-      },
-   ];
-
-   const activePackages = [
-      {
-         name: 'Premium VIP',
-         invested: '$2,500',
-         earned: '$890',
-         daily: '$42.50',
-         daysLeft: 32,
-         progress: 47,
-      },
-   ];
+   const { data: me } = useMe();
+   const { data: wallet } = useMyWallet();
+   const { data: txPage } = useTransactions({ page: 1, limit: 10 });
+   const { data: invPage } = useInvestments({ page: 1, limit: 10 });
+   const recentTransactions = (txPage?.data ?? []).map((t: any) => ({
+      type: t.type ?? 'Transaction',
+      amount: `${t.amountCents >= 0 ? '+' : '-'}$${Math.abs(t.amountCents / 100).toLocaleString()}`,
+      date: t.createdAt ? new Date(t.createdAt).toLocaleString() : '',
+      status: (t.status ?? 'completed').toString().toLowerCase(),
+   }));
 
    return (
       <div className="min-h-screen bg-background">
@@ -59,7 +37,7 @@ const Dashboard = () => {
             {/* Welcome Section */}
             <div className="mb-8 animate-slide-up">
                <h1 className="text-3xl font-bold text-foreground mb-2">
-                  Welcome Back, John!
+                  {`Welcome Back${me?.firstName ? `, ${me.firstName}!` : '!'}`}
                </h1>
                <p className="text-muted-foreground">
                   Here's your investment overview
@@ -70,32 +48,32 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
                <StatsCard
                   title="Total Balance"
-                  value="$3,890.00"
+                  value={`$${((wallet?.balanceCents ?? 0) / 100).toLocaleString()}`}
                   icon={Wallet}
                   trend="+12.5% this month"
                   trendUp={true}
                   variant="default"
                />
                <StatsCard
-                  title="Total Profit"
-                  value="$890.00"
+                  title="Active Investments"
+                  value={`${invPage?.total ?? 0}`}
                   icon={TrendingUp}
-                  trend="+$45 today"
+                  trend="Investments"
                   trendUp={true}
                   variant="success"
                />
                <StatsCard
-                  title="Active Packages"
-                  value="1"
+                  title="Recent Transactions"
+                  value={`${txPage?.total ?? 0}`}
                   icon={Package}
-                  trend="Premium VIP"
+                  trend="Last 10 fetched"
                   variant="default"
                />
                <StatsCard
                   title="Referrals"
-                  value="8"
+                  value={me?.referralCount ? String(me.referralCount) : '0'}
                   icon={Users}
-                  trend="+$125 earned"
+                  trend="Total"
                   trendUp={true}
                   variant="accent"
                />
@@ -114,70 +92,85 @@ const Dashboard = () => {
                         </Button>
                      </div>
 
-                     {activePackages.map((pkg, index) => (
-                        <div key={index} className="bg-muted rounded-xl p-6">
-                           <div className="flex items-start justify-between mb-4">
+                     {(invPage?.data ?? [])
+                        .slice(0, 1)
+                        .map((inv: any, index: number) => (
+                           <div key={index} className="bg-muted rounded-xl p-6">
+                              <div className="flex items-start justify-between mb-4">
+                                 <div>
+                                    <h3 className="text-lg font-semibold text-foreground mb-1">
+                                       Active Investment
+                                    </h3>
+                                    <p className="text-sm text-muted-foreground">
+                                       Investment: $
+                                       {(
+                                          inv.amountCents / 100
+                                       ).toLocaleString()}
+                                    </p>
+                                 </div>
+                                 <div className="text-right">
+                                    <p className="text-2xl font-bold text-green-400">
+                                       $
+                                       {Math.floor(
+                                          (inv.amountCents *
+                                             (inv.totalReturnCents
+                                                ? inv.totalReturnCents /
+                                                  inv.amountCents
+                                                : 1)) /
+                                             100
+                                       ).toLocaleString()}
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                       Total Return (plan)
+                                    </p>
+                                 </div>
+                              </div>
+
+                              <div className="grid grid-cols-2 gap-4 mb-4">
+                                 <div className="bg-card rounded-lg p-3">
+                                    <div className="flex items-center gap-2 mb-1">
+                                       <DollarSign className="w-4 h-4 text-green-400" />
+                                       <p className="text-xs text-muted-foreground">
+                                          Daily Profit (bps)
+                                       </p>
+                                    </div>
+                                    <p className="text-lg font-semibold text-foreground">
+                                       {inv.dailyProfitBps
+                                          ? `${(inv.dailyProfitBps / 100).toFixed(2)}%`
+                                          : '—'}
+                                    </p>
+                                 </div>
+                                 <div className="bg-card rounded-lg p-3">
+                                    <div className="flex items-center gap-2 mb-1">
+                                       <Clock className="w-4 h-4 text-primary" />
+                                       <p className="text-xs text-muted-foreground">
+                                          Status
+                                       </p>
+                                    </div>
+                                    <p className="text-lg font-semibold text-foreground">
+                                       {inv.status ?? 'ACTIVE'}
+                                    </p>
+                                 </div>
+                              </div>
+
                               <div>
-                                 <h3 className="text-lg font-semibold text-foreground mb-1">
-                                    {pkg.name}
-                                 </h3>
-                                 <p className="text-sm text-muted-foreground">
-                                    Investment: {pkg.invested}
-                                 </p>
-                              </div>
-                              <div className="text-right">
-                                 <p className="text-2xl font-bold text-green-400">
-                                    {pkg.earned}
-                                 </p>
-                                 <p className="text-sm text-muted-foreground">
-                                    Total Earned
-                                 </p>
-                              </div>
-                           </div>
-
-                           <div className="grid grid-cols-2 gap-4 mb-4">
-                              <div className="bg-card rounded-lg p-3">
-                                 <div className="flex items-center gap-2 mb-1">
-                                    <DollarSign className="w-4 h-4 text-green-400" />
-                                    <p className="text-xs text-muted-foreground">
-                                       Daily Profit
-                                    </p>
+                                 <div className="flex justify-between text-sm mb-2">
+                                    <span className="text-muted-foreground">
+                                       Progress
+                                    </span>
+                                    <span className="text-foreground font-medium">
+                                       50%
+                                    </span>
                                  </div>
-                                 <p className="text-lg font-semibold text-foreground">
-                                    {pkg.daily}
-                                 </p>
-                              </div>
-                              <div className="bg-card rounded-lg p-3">
-                                 <div className="flex items-center gap-2 mb-1">
-                                    <Clock className="w-4 h-4 text-primary" />
-                                    <p className="text-xs text-muted-foreground">
-                                       Days Left
-                                    </p>
+                                 <div className="h-2 bg-secondary rounded-full overflow-hidden">
+                                    <div
+                                       className="h-full bg-green-400 transition-all duration-500"
+                                       style={{ width: `50%` }}
+                                    />
                                  </div>
-                                 <p className="text-lg font-semibold text-foreground">
-                                    {pkg.daysLeft} days
-                                 </p>
                               </div>
                            </div>
-
-                           <div>
-                              <div className="flex justify-between text-sm mb-2">
-                                 <span className="text-muted-foreground">
-                                    Progress
-                                 </span>
-                                 <span className="text-foreground font-medium">
-                                    {pkg.progress}%
-                                 </span>
-                              </div>
-                              <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                                 <div
-                                    className="h-full bg-green-400 transition-all duration-500"
-                                    style={{ width: `${pkg.progress}%` }}
-                                 />
-                              </div>
-                           </div>
-                        </div>
-                     ))}
+                        ))}
                   </Card>
 
                   {/* Recent Transactions */}
@@ -192,66 +185,68 @@ const Dashboard = () => {
                      </div>
 
                      <div className="space-y-4">
-                        {recentTransactions.map((transaction, index) => (
-                           <div
-                              key={index}
-                              className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
-                           >
-                              <div className="flex items-center gap-4">
-                                 <div
-                                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                                       transaction.type.includes('Profit') ||
-                                       transaction.type.includes('Bonus')
-                                          ? 'bg-green-100'
-                                          : transaction.type.includes(
-                                                 'Withdrawal'
-                                              )
-                                            ? 'bg-orange-100'
-                                            : 'bg-primary/10'
-                                    }`}
-                                 >
-                                    {transaction.type.includes('Profit') ||
-                                    transaction.type.includes('Bonus') ? (
-                                       <TrendingUp className="w-5 h-5 text-green-400" />
-                                    ) : transaction.type.includes(
-                                         'Withdrawal'
-                                      ) ? (
-                                       <ArrowUpRight className="w-5 h-5 text-orange-400" />
-                                    ) : (
-                                       <DollarSign className="w-5 h-5 text-primary" />
-                                    )}
+                        {recentTransactions.map(
+                           (transaction: any, index: number) => (
+                              <div
+                                 key={index}
+                                 className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
+                              >
+                                 <div className="flex items-center gap-4">
+                                    <div
+                                       className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                                          transaction.type.includes('Profit') ||
+                                          transaction.type.includes('Bonus')
+                                             ? 'bg-green-100'
+                                             : transaction.type.includes(
+                                                    'Withdrawal'
+                                                 )
+                                               ? 'bg-orange-100'
+                                               : 'bg-primary/10'
+                                       }`}
+                                    >
+                                       {transaction.type.includes('Profit') ||
+                                       transaction.type.includes('Bonus') ? (
+                                          <TrendingUp className="w-5 h-5 text-green-400" />
+                                       ) : transaction.type.includes(
+                                            'Withdrawal'
+                                         ) ? (
+                                          <ArrowUpRight className="w-5 h-5 text-orange-400" />
+                                       ) : (
+                                          <DollarSign className="w-5 h-5 text-primary" />
+                                       )}
+                                    </div>
+                                    <div>
+                                       <p className="font-medium text-foreground">
+                                          {transaction.type}
+                                       </p>
+                                       <p className="text-sm text-muted-foreground">
+                                          {transaction.date}
+                                       </p>
+                                    </div>
                                  </div>
-                                 <div>
-                                    <p className="font-medium text-foreground">
-                                       {transaction.type}
+                                 <div className="text-right">
+                                    <p
+                                       className={`font-semibold ${
+                                          transaction.amount.startsWith('+')
+                                             ? 'text-green-400'
+                                             : 'text-foreground'
+                                       }`}
+                                    >
+                                       {transaction.amount}
                                     </p>
-                                    <p className="text-sm text-muted-foreground">
-                                       {transaction.date}
+                                    <p
+                                       className={`text-xs ${
+                                          transaction.status === 'completed'
+                                             ? 'text-green-400'
+                                             : 'text-orange-400'
+                                       }`}
+                                    >
+                                       {transaction.status}
                                     </p>
                                  </div>
                               </div>
-                              <div className="text-right">
-                                 <p
-                                    className={`font-semibold ${
-                                       transaction.amount.startsWith('+')
-                                          ? 'text-green-400'
-                                          : 'text-foreground'
-                                    }`}
-                                 >
-                                    {transaction.amount}
-                                 </p>
-                                 <p
-                                    className={`text-xs ${
-                                       transaction.status === 'completed'
-                                          ? 'text-green-400'
-                                          : 'text-orange-400'
-                                    }`}
-                                 >
-                                    {transaction.status}
-                                 </p>
-                              </div>
-                           </div>
-                        ))}
+                           )
+                        )}
                      </div>
                   </Card>
                </div>
@@ -262,30 +257,36 @@ const Dashboard = () => {
                      <h2 className="text-xl font-semibold text-foreground mb-6">
                         Quick Actions
                      </h2>
-                     <div className="space-y-3">
-                        <Button
-                           className="w-full bg-primary text-white justify-between"
-                           size="lg"
-                        >
-                           <span>New Investment</span>
-                           <ArrowUpRight className="w-5 h-5" />
-                        </Button>
-                        <Button
-                           variant="outline"
-                           className="w-full justify-between"
-                           size="lg"
-                        >
-                           <span>Withdraw Funds</span>
-                           <Wallet className="w-5 h-5" />
-                        </Button>
-                        <Button
-                           variant="outline"
-                           className="w-full justify-between"
-                           size="lg"
-                        >
-                           <span>Invite Friends</span>
-                           <Users className="w-5 h-5" />
-                        </Button>
+                     <div className="flex flex-col gap-y-3 ">
+                        <NavLink to="/packages">
+                           <Button
+                              className="w-full bg-primary text-white justify-between"
+                              size="lg"
+                           >
+                              <span>New Investment</span>
+                              <ArrowUpRight className="w-5 h-5" />
+                           </Button>
+                        </NavLink>
+                        <NavLink to="/withdraw">
+                           <Button
+                              variant="outline"
+                              className="w-full justify-between"
+                              size="lg"
+                           >
+                              <span>Withdraw Funds</span>
+                              <Wallet className="w-5 h-5" />
+                           </Button>
+                        </NavLink>
+                        <NavLink to="/referrals">
+                           <Button
+                              variant="outline"
+                              className="w-full justify-between"
+                              size="lg"
+                           >
+                              <span>Invite Friends</span>
+                              <Users className="w-5 h-5" />
+                           </Button>
+                        </NavLink>
                      </div>
                   </Card>
 

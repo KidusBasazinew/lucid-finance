@@ -4,34 +4,42 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Wallet, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { useMyWallet } from '@/hooks/useWallet';
+import { useRequestWithdrawal, useWithdrawals } from '@/hooks/useWithdrawals';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 const Withdraw = () => {
-   const withdrawalHistory = [
-      {
-         amount: '$500.00',
-         date: 'Dec 20, 2024',
-         status: 'completed',
-         txId: 'TXN-20241220-001',
-      },
-      {
-         amount: '$1,250.00',
-         date: 'Dec 15, 2024',
-         status: 'completed',
-         txId: 'TXN-20241215-002',
-      },
-      {
-         amount: '$750.00',
-         date: 'Dec 10, 2024',
-         status: 'completed',
-         txId: 'TXN-20241210-003',
-      },
-      {
-         amount: '$2,000.00',
-         date: 'Dec 5, 2024',
-         status: 'completed',
-         txId: 'TXN-20241205-004',
-      },
-   ];
+   const { data: wallet } = useMyWallet();
+   const { data: wPage } = useWithdrawals({ page: 1, limit: 20 });
+   const request = useRequestWithdrawal();
+
+   const [amount, setAmount] = useState('');
+   const [method, setMethod] = useState('Bank Transfer');
+   const [account, setAccount] = useState('');
+   const [notes, setNotes] = useState('');
+
+   const onSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      const cents = Math.round(parseFloat(amount || '0') * 100);
+      if (!cents || cents < 5000) {
+         toast.error('Minimum withdrawal is $50.00');
+         return;
+      }
+      try {
+         await request.mutateAsync({
+            amountCents: cents,
+            destination: `${method}: ${account}${notes ? ` (${notes})` : ''}`,
+         });
+         toast.success('Withdrawal requested');
+         setAmount('');
+         setAccount('');
+         setNotes('');
+      } catch (e: any) {
+         const msg = e?.response?.data?.message || 'Request failed';
+         toast.error(msg);
+      }
+   };
 
    return (
       <div className="min-h-screen bg-background">
@@ -60,27 +68,32 @@ const Withdraw = () => {
                               Total Available
                            </p>
                            <p className="text-4xl font-bold text-white">
-                              $3,890.00
+                              {(
+                                 (wallet?.balanceCents ?? 0) / 100
+                              ).toLocaleString()}{' '}
+                              Birr
                            </p>
                         </div>
                      </div>
 
-                     <form className="space-y-5">
+                     <form className="space-y-5" onSubmit={onSubmit}>
                         <div>
                            <Label htmlFor="amount">Withdrawal Amount</Label>
                            <div className="relative mt-1.5">
-                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
-                                 $
+                              <span className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground">
+                                 Birr
                               </span>
                               <Input
                                  id="amount"
                                  type="number"
                                  placeholder="0.00"
-                                 className="pl-8"
+                                 className="pl-12"
+                                 value={amount}
+                                 onChange={(e) => setAmount(e.target.value)}
                               />
                            </div>
                            <p className="text-sm text-muted-foreground mt-1.5">
-                              Minimum withdrawal: $50.00
+                              Minimum withdrawal: 50.00 Birr
                            </p>
                         </div>
 
@@ -91,6 +104,8 @@ const Withdraw = () => {
                            <select
                               id="payment-method"
                               className="w-full mt-1.5 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                              value={method}
+                              onChange={(e) => setMethod(e.target.value)}
                            >
                               <option>Bank Transfer</option>
                               <option>PayPal</option>
@@ -108,6 +123,8 @@ const Withdraw = () => {
                               type="text"
                               placeholder="Enter your account number or wallet address"
                               className="mt-1.5"
+                              value={account}
+                              onChange={(e) => setAccount(e.target.value)}
                            />
                         </div>
 
@@ -118,12 +135,21 @@ const Withdraw = () => {
                               rows={3}
                               placeholder="Any special instructions..."
                               className="w-full mt-1.5 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                              value={notes}
+                              onChange={(e) => setNotes(e.target.value)}
                            />
                         </div>
 
-                        <Button className="w-full" size="lg">
+                        <Button
+                           className="w-full"
+                           size="lg"
+                           type="submit"
+                           disabled={request.isPending}
+                        >
                            <Wallet className="w-5 h-5 mr-2" />
-                           Request Withdrawal
+                           {request.isPending
+                              ? 'Submitting...'
+                              : 'Request Withdrawal'}
                         </Button>
                      </form>
                   </Card>
@@ -134,34 +160,43 @@ const Withdraw = () => {
                         Withdrawal History
                      </h2>
                      <div className="space-y-4">
-                        {withdrawalHistory.map((withdrawal, index) => (
-                           <div
-                              key={index}
-                              className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
-                           >
-                              <div className="flex items-center gap-4">
-                                 <div className="w-10 h-10 rounded-full bg-success-light flex items-center justify-center">
-                                    <CheckCircle className="w-5 h-5 text-success" />
+                        {(wPage?.data ?? []).map(
+                           (withdrawal: any, index: number) => (
+                              <div
+                                 key={index}
+                                 className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
+                              >
+                                 <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-success-light flex items-center justify-center">
+                                       <CheckCircle className="w-5 h-5 text-success" />
+                                    </div>
+                                    <div>
+                                       <p className="font-medium text-foreground">
+                                          {(
+                                             withdrawal.amountCents / 100
+                                          ).toLocaleString()}{' '}
+                                          Birr
+                                       </p>
+                                       <p className="text-sm text-muted-foreground">
+                                          {withdrawal.id}
+                                       </p>
+                                    </div>
                                  </div>
-                                 <div>
-                                    <p className="font-medium text-foreground">
-                                       {withdrawal.amount}
-                                    </p>
+                                 <div className="text-right">
                                     <p className="text-sm text-muted-foreground">
-                                       {withdrawal.txId}
+                                       {withdrawal.createdAt
+                                          ? new Date(
+                                               withdrawal.createdAt
+                                            ).toLocaleDateString()
+                                          : ''}
+                                    </p>
+                                    <p className="text-xs text-success font-medium">
+                                       {withdrawal.status ?? 'completed'}
                                     </p>
                                  </div>
                               </div>
-                              <div className="text-right">
-                                 <p className="text-sm text-muted-foreground">
-                                    {withdrawal.date}
-                                 </p>
-                                 <p className="text-xs text-success font-medium">
-                                    Completed
-                                 </p>
-                              </div>
-                           </div>
-                        ))}
+                           )
+                        )}
                      </div>
                   </Card>
                </div>
@@ -191,7 +226,7 @@ const Withdraw = () => {
                                  Minimum Amount
                               </p>
                               <p className="text-sm text-muted-foreground">
-                                 $50.00 per withdrawal
+                                 50.00 Birr per withdrawal
                               </p>
                            </div>
                         </div>

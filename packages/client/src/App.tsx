@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 import { TooltipProvider } from './components/ui/tooltip';
 import { Toaster as Sonner, Toaster } from '@/components/ui/sonner';
 import Home from './pages/Home';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 const queryClient = new QueryClient();
 
@@ -24,11 +25,39 @@ const App = () => {
                   <Route path="/" element={<Home />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
-                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route
+                     path="/dashboard"
+                     element={
+                        <ProtectedRoute>
+                           <Dashboard />
+                        </ProtectedRoute>
+                     }
+                  />
                   <Route path="/packages" element={<Packages />} />
-                  <Route path="/withdraw" element={<Withdraw />} />
-                  <Route path="/referrals" element={<Referrals />} />
-                  <Route path="/profile" element={<Profile />} />
+                  <Route
+                     path="/withdraw"
+                     element={
+                        <ProtectedRoute>
+                           <Withdraw />
+                        </ProtectedRoute>
+                     }
+                  />
+                  <Route
+                     path="/referrals"
+                     element={
+                        <ProtectedRoute>
+                           <Referrals />
+                        </ProtectedRoute>
+                     }
+                  />
+                  <Route
+                     path="/profile"
+                     element={
+                        <ProtectedRoute>
+                           <Profile />
+                        </ProtectedRoute>
+                     }
+                  />
                   {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                   {/* <Route path="*" element={<NotFound />} /> */}
                </Routes>
