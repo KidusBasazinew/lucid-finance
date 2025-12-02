@@ -5,6 +5,19 @@ export const transactionRepository = {
    create(data: Prisma.TransactionCreateInput) {
       return prisma.transaction.create({ data });
    },
+   async existsByReference(ref: string) {
+      const found = await prisma.transaction.findUnique({
+         where: { reference: ref },
+      });
+      return Boolean(found);
+   },
+   async existsByReferencePrefix(prefix: string) {
+      const found = await prisma.transaction.findFirst({
+         where: { reference: { startsWith: prefix } },
+         select: { id: true },
+      });
+      return Boolean(found);
+   },
    async listByUser(
       userId: string,
       params: {

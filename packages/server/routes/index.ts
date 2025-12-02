@@ -7,6 +7,7 @@ import transactionRoute from './transaction.route';
 import referralRoute from './referral.route';
 import walletRoute from './wallet.route';
 import withdrawalRoute from './withdrawal.route';
+import adminRoute from './admin.route';
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.use('/transactions', transactionRoute);
 router.use('/referrals', referralRoute);
 router.use('/wallet', walletRoute);
 router.use('/withdrawals', withdrawalRoute);
+router.use('/admin', adminRoute);
 
 export default router;

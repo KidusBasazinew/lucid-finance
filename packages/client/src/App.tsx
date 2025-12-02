@@ -7,6 +7,7 @@ import Packages from './pages/Packages';
 import Withdraw from './pages/Withdraw';
 import Referrals from './pages/Referrals';
 import Profile from './pages/Profile';
+import Admin from './pages/Admin';
 import { TooltipProvider } from './components/ui/tooltip';
 import { Toaster as Sonner, Toaster } from '@/components/ui/sonner';
 import Home from './pages/Home';
@@ -55,6 +56,14 @@ const App = () => {
                      element={
                         <ProtectedRoute>
                            <Profile />
+                        </ProtectedRoute>
+                     }
+                  />
+                  <Route
+                     path="/admin"
+                     element={
+                        <ProtectedRoute>
+                           <Admin />
                         </ProtectedRoute>
                      }
                   />

@@ -5,6 +5,19 @@ export const withdrawalRepository = {
    create(data: Prisma.WithdrawalCreateInput) {
       return prisma.withdrawal.create({ data });
    },
+   findById(id: string) {
+      return prisma.withdrawal.findUnique({ where: { id } });
+   },
+   update(id: string, data: Prisma.WithdrawalUpdateInput) {
+      return prisma.withdrawal.update({ where: { id }, data });
+   },
+   list(params: {
+      where?: Prisma.WithdrawalWhereInput;
+      orderBy?: Prisma.WithdrawalOrderByWithRelationInput;
+      include?: Prisma.WithdrawalInclude;
+   }) {
+      return prisma.withdrawal.findMany(params);
+   },
    async listByUser(
       userId: string,
       params: {

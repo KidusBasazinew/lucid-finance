@@ -11,12 +11,13 @@ import {
    X,
 } from 'lucide-react';
 import { useState } from 'react';
-import { useLogout } from '@/hooks/useAuth';
+import { useLogout, useMe } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router';
 
 const Navigation = () => {
    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
    const logout = useLogout();
+   const { data: me } = useMe();
    const navigate = useNavigate();
    const handleLogout = async () => {
       await logout.mutateAsync();
@@ -70,6 +71,16 @@ const Navigation = () => {
                         <Users className="w-4 h-4" />
                         <span>Referrals</span>
                      </NavLink>
+                     {me?.role === 'ADMIN' && (
+                        <NavLink
+                           to="/admin"
+                           className="flex items-center gap-2 px-4 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
+                           activeClassName="bg-secondary text-foreground font-medium"
+                        >
+                           <LayoutDashboard className="w-4 h-4" />
+                           <span>Admin</span>
+                        </NavLink>
+                     )}
                   </div>
                </div>
 
@@ -149,6 +160,17 @@ const Navigation = () => {
                      <Users className="w-4 h-4" />
                      <span>Referrals</span>
                   </NavLink>
+                  {me?.role === 'ADMIN' && (
+                     <NavLink
+                        to="/admin"
+                        className="flex items-center gap-2 px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
+                        activeClassName="bg-secondary text-foreground font-medium"
+                        onClick={() => setMobileMenuOpen(false)}
+                     >
+                        <LayoutDashboard className="w-4 h-4" />
+                        <span>Admin</span>
+                     </NavLink>
+                  )}
                   <div className="pt-3 border-t border-border mt-3 space-y-1">
                      <NavLink
                         to="/profile"
