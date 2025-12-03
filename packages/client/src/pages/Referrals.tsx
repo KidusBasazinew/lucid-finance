@@ -43,7 +43,14 @@ const Referrals = () => {
       status: r.status || 'active',
    }));
 
-   console.log(referredUsers);
+   const totalEarned = referredUsers.reduce((sum: number, user: any) => {
+      const value = parseFloat(user.earned.replace('Birr ', ''));
+      return sum + (isNaN(value) ? 0 : value);
+   }, 0);
+
+   const totalReferrals = referredUsers.length;
+
+   console.log({ totalEarned, totalReferrals });
 
    return (
       <div className="min-h-screen bg-background">
@@ -71,11 +78,7 @@ const Referrals = () => {
                />
                <StatsCard
                   title="Total Earned"
-                  value={
-                     me?.referralEarningsCents != null
-                        ? `$${(me.referralEarningsCents / 100).toLocaleString()}`
-                        : '$0.00'
-                  }
+                  value={totalEarned}
                   icon={DollarSign}
                   trend="+$175 this week"
                   trendUp={true}
@@ -83,7 +86,7 @@ const Referrals = () => {
                />
                <StatsCard
                   title="Active Referrals"
-                  value="5"
+                  value={totalReferrals}
                   icon={TrendingUp}
                   trend="62.5% rate"
                   variant="accent"

@@ -79,7 +79,7 @@ const Packages = () => {
                            amount={formatMoney(pkg.amountCents)}
                            dailyProfit={`${(pkg.dailyProfitBps / 100).toFixed(2)}%`}
                            duration={`${pkg.durationDays} days`}
-                           totalReturn={`${formatMoney(Math.floor((pkg.amountCents * pkg.totalReturnBps) / 10000))}`}
+                           totalReturn={formatMoney(pkg.totalReturnBps * 100)}
                            referralBonus={`${(pkg.referralBonusBps / 100).toFixed(2)}%`}
                            featured={Boolean(pkg.featured)}
                            features={pkg.features ?? []}

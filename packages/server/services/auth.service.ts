@@ -63,18 +63,18 @@ export const authService = {
       });
 
       // Record referral relation for reporting if user registered using a referral code
-      if (referredById) {
-         try {
-            await referralRepository.create({
-               user: { connect: { id: referredById } },
-               referredUserId: user.id,
-               bonusCents: 25,
-            } as any);
-         } catch (e) {
-            // Swallow referral creation errors to not block registration
-            // Could be duplicate or constraint issues; not critical for user signup
-         }
-      }
+      // if (referredById) {
+      //    try {
+      //       await referralRepository.create({
+      //          user: { connect: { id: referredById } },
+      //          referredUserId: user.id,
+      //          bonusCents: 25,
+      //       } as any);
+      //    } catch (e) {
+      //       // Swallow referral creation errors to not block registration
+      //       // Could be duplicate or constraint issues; not critical for user signup
+      //    }
+      // }
 
       const accessToken = signAccessToken(user.id);
       const refreshToken = signRefreshToken(user.id);

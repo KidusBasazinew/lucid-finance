@@ -54,9 +54,8 @@ export const investmentService = {
             const exists =
                await transactionRepository.existsByReferencePrefix(refPrefix);
             if (!exists) {
-               const bonusCents = Math.floor(
-                  (pack.amountCents * pack.referralBonusBps) / 10000
-               );
+               const bonusCents = pack.referralBonusBps * 100;
+
                await walletRepository.increaseBalance(referrerId, bonusCents);
                await transactionService.create(referrerId, {
                   type: 'REFERRAL' as any,
