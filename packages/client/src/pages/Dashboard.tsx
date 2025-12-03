@@ -291,10 +291,10 @@ const Dashboard = () => {
                   </Card>
 
                   <Card className="p-6 shadow-custom-md bg-gradient-to-br from-blue-950 to-blue-900 text-primary-foreground">
-                     <h3 className="text-lg font-semibold mb-2">
+                     <h3 className="text-lg text-white  font-semibold mb-2">
                         Invite & Earn
                      </h3>
-                     <p className="text-sm opacity-90 mb-4">
+                     <p className="text-sm text-white opacity-90 mb-4">
                         Share your referral link and earn up to 10% commission
                         on every investment!
                      </p>

@@ -13,9 +13,13 @@ import {
 import { useState } from 'react';
 import { useLogout, useMe } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router';
+// import { ModeToggle } from './mode-toggle';
+import { cn } from '@/lib/utils';
+import { SidebarLink } from './SideBarLink';
 
 const Navigation = () => {
    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
    const logout = useLogout();
    const { data: me } = useMe();
    const navigate = useNavigate();
@@ -25,91 +29,120 @@ const Navigation = () => {
    };
 
    return (
-      <nav className="border-b border-border bg-card sticky top-0 z-50 shadow-custom-sm">
+      <nav className="sticky top-0 z-50 bg-zinc-900/30 backdrop-blur-lg border-b border-zinc-800">
          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
-               <div className="flex items-center gap-8">
-                  <NavLink to="/" className="flex items-center gap-2">
-                     <div className="w-10 h-10 rounded-lg gradient-primary flex items-center justify-center">
-                        <Package className="w-5 h-5 text-primary" />
+               {/* Logo */}
+               <NavLink to="/" className="flex items-center gap-2 group">
+                  <div className="relative">
+                     <div
+                        className="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-fuchsia-600 
+                               flex items-center justify-center shadow-lg shadow-violet-500/25 
+                               group-hover:shadow-violet-500/40 transition-shadow"
+                     >
+                        <Package className="w-5 h-5 text-white" />
                      </div>
-                     <span className="text-xl font-bold text-foreground">
-                        VIP Invest
-                     </span>
-                  </NavLink>
-
-                  <div className="hidden md:flex items-center gap-1">
-                     <NavLink
-                        to="/dashboard"
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                        activeClassName="bg-secondary text-foreground font-medium"
+                     <div
+                        className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full 
+                               bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center"
                      >
-                        <LayoutDashboard className="w-4 h-4" />
-                        <span>Dashboard</span>
-                     </NavLink>
-                     <NavLink
-                        to="/packages"
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                        activeClassName="bg-secondary text-foreground font-medium"
-                     >
-                        <Package className="w-4 h-4" />
-                        <span>Packages</span>
-                     </NavLink>
-                     <NavLink
-                        to="/withdraw"
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                        activeClassName="bg-secondary text-foreground font-medium"
-                     >
-                        <Wallet className="w-4 h-4" />
-                        <span>Withdraw</span>
-                     </NavLink>
-                     <NavLink
-                        to="/referrals"
-                        className="flex items-center gap-2 px-4 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                        activeClassName="bg-secondary text-foreground font-medium"
-                     >
-                        <Users className="w-4 h-4" />
-                        <span>Referrals</span>
-                     </NavLink>
-                     {me?.role === 'ADMIN' && (
-                        <NavLink
-                           to="/admin"
-                           className="flex items-center gap-2 px-4 py-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                           activeClassName="bg-secondary text-foreground font-medium"
-                        >
-                           <LayoutDashboard className="w-4 h-4" />
-                           <span>Admin</span>
-                        </NavLink>
-                     )}
+                        <div className="w-2 h-2 bg-white rounded-full" />
+                     </div>
                   </div>
-               </div>
 
-               <div className="hidden md:flex items-center gap-3">
-                  <NavLink to="/profile">
-                     <Button
-                        variant="ghost"
-                        size="icon"
-                        className="rounded-full"
-                     >
-                        <User className="w-4 h-4" />
-                     </Button>
-                  </NavLink>
-                  <Button
-                     variant="ghost"
-                     size="sm"
-                     className="gap-2"
-                     onClick={handleLogout}
-                  >
-                     <LogOut className="w-4 h-4" />
-                     Logout
-                  </Button>
-               </div>
+                  <div className="flex flex-col">
+                     <span className="font-bold text-lg tracking-tight leading-none text-white">
+                        LUCID
+                     </span>
+                     <span className="text-[10px] uppercase tracking-[0.2em] text-zinc-500">
+                        Finance
+                     </span>
+                  </div>
+               </NavLink>
 
+               {me ? (
+                  <>
+                     {/* Desktop Nav */}
+                     <div className="hidden md:flex items-center gap-1">
+                        {[
+                           {
+                              to: '/dashboard',
+                              label: 'Dashboard',
+                              icon: LayoutDashboard,
+                           },
+                           {
+                              to: '/packages',
+                              label: 'Packages',
+                              icon: Package,
+                           },
+                           { to: '/withdraw', label: 'Withdraw', icon: Wallet },
+                           {
+                              to: '/referrals',
+                              label: 'Referrals',
+                              icon: Users,
+                           },
+                           ...(me?.role === 'ADMIN'
+                              ? [
+                                   {
+                                      to: '/admin',
+                                      label: 'Admin',
+                                      icon: LayoutDashboard,
+                                   },
+                                ]
+                              : []),
+                        ].map((item) => {
+                           return <SidebarLink item={item} />;
+                        })}
+                     </div>
+
+                     {/* Desktop Actions */}
+                     <div className="hidden md:flex items-center gap-3">
+                        <NavLink to="/profile">
+                           <Button
+                              variant="ghost"
+                              size="icon"
+                              className="rounded-full text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                           >
+                              <User className="w-4 h-4" />
+                           </Button>
+                        </NavLink>
+
+                        <Button
+                           variant="ghost"
+                           size="sm"
+                           onClick={handleLogout}
+                           className="flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                        >
+                           <LogOut className="w-4 h-4" />
+                           Logout
+                        </Button>
+                     </div>
+                  </>
+               ) : (
+                  <div className="flex items-center justify-center">
+                     <NavLink to="/login">
+                        <Button variant="ghost">Login</Button>
+                     </NavLink>
+                     <NavLink to="/register">
+                        <Button
+                           variant="ghost"
+                           size="sm"
+                           onClick={handleLogout}
+                           className="flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                        >
+                           <LogOut className="w-4 h-4" />
+                           Get Start
+                        </Button>
+                     </NavLink>
+                  </div>
+               )}
+
+               {/* Mobile Button */}
                <Button
                   variant="ghost"
                   size="icon"
-                  className="md:hidden"
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  className="md:hidden text-zinc-400 hover:text-white hover:bg-zinc-800/50"
                >
                   {mobileMenuOpen ? (
                      <X className="w-5 h-5" />
@@ -120,77 +153,84 @@ const Navigation = () => {
             </div>
          </div>
 
-         {/* Mobile menu */}
+         {/* Mobile Menu */}
          {mobileMenuOpen && (
-            <div className="md:hidden border-t border-border bg-card">
+            <div className="md:hidden border-t border-zinc-800 bg-zinc-900/40 backdrop-blur-lg">
                <div className="px-4 py-3 space-y-1">
-                  <NavLink
-                     to="/dashboard"
-                     className="flex items-center gap-2 px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                     activeClassName="bg-secondary text-foreground font-medium"
-                     onClick={() => setMobileMenuOpen(false)}
-                  >
-                     <LayoutDashboard className="w-4 h-4" />
-                     <span>Dashboard</span>
-                  </NavLink>
-                  <NavLink
-                     to="/packages"
-                     className="flex items-center gap-2 px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                     activeClassName="bg-secondary text-foreground font-medium"
-                     onClick={() => setMobileMenuOpen(false)}
-                  >
-                     <Package className="w-4 h-4" />
-                     <span>Packages</span>
-                  </NavLink>
-                  <NavLink
-                     to="/withdraw"
-                     className="flex items-center gap-2 px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                     activeClassName="bg-secondary text-foreground font-medium"
-                     onClick={() => setMobileMenuOpen(false)}
-                  >
-                     <Wallet className="w-4 h-4" />
-                     <span>Withdraw</span>
-                  </NavLink>
-                  <NavLink
-                     to="/referrals"
-                     className="flex items-center gap-2 px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                     activeClassName="bg-secondary text-foreground font-medium"
-                     onClick={() => setMobileMenuOpen(false)}
-                  >
-                     <Users className="w-4 h-4" />
-                     <span>Referrals</span>
-                  </NavLink>
-                  {me?.role === 'ADMIN' && (
-                     <NavLink
-                        to="/admin"
-                        className="flex items-center gap-2 px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                        activeClassName="bg-secondary text-foreground font-medium"
-                        onClick={() => setMobileMenuOpen(false)}
-                     >
-                        <LayoutDashboard className="w-4 h-4" />
-                        <span>Admin</span>
-                     </NavLink>
+                  {me ? (
+                     <>
+                        {[
+                           {
+                              to: '/dashboard',
+                              label: 'Dashboard',
+                              icon: LayoutDashboard,
+                           },
+                           {
+                              to: '/packages',
+                              label: 'Packages',
+                              icon: Package,
+                           },
+                           { to: '/withdraw', label: 'Withdraw', icon: Wallet },
+                           {
+                              to: '/referrals',
+                              label: 'Referrals',
+                              icon: Users,
+                           },
+                           ...(me?.role === 'ADMIN'
+                              ? [
+                                   {
+                                      to: '/admin',
+                                      label: 'Admin',
+                                      icon: LayoutDashboard,
+                                   },
+                                ]
+                              : []),
+                        ].map((item) => {
+                           return <SidebarLink item={item} />;
+                        })}
+
+                        <div className="pt-3 border-t border-zinc-800 space-y-1">
+                           <NavLink
+                              to="/profile"
+                              onClick={() => setMobileMenuOpen(false)}
+                              className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800/40"
+                           >
+                              <User className="w-4 h-4" />
+                              Profile
+                           </NavLink>
+
+                           <button
+                              onClick={() => {
+                                 setMobileMenuOpen(false);
+                                 handleLogout();
+                              }}
+                              className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800/40 w-full text-left"
+                           >
+                              <LogOut className="w-4 h-4" />
+                              Logout
+                           </button>
+                        </div>
+                     </>
+                  ) : (
+                     <div className="flex flex-col gap-2">
+                        <NavLink
+                           to="/login"
+                           onClick={() => setMobileMenuOpen(false)}
+                        >
+                           <Button variant="ghost" className="w-full">
+                              Login
+                           </Button>
+                        </NavLink>
+                        <NavLink
+                           to="/register"
+                           onClick={() => setMobileMenuOpen(false)}
+                        >
+                           <Button variant="ghost" className="w-full">
+                              Get Started
+                           </Button>
+                        </NavLink>
+                     </div>
                   )}
-                  <div className="pt-3 border-t border-border mt-3 space-y-1">
-                     <NavLink
-                        to="/profile"
-                        className="flex items-center gap-2 px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
-                        onClick={() => setMobileMenuOpen(false)}
-                     >
-                        <User className="w-4 h-4" />
-                        <span>Profile</span>
-                     </NavLink>
-                     <button
-                        className="flex items-center gap-2 px-4 py-3 rounded-lg text-muted-foreground hover:text-foreground hover:bg-secondary transition-all w-full text-left"
-                        onClick={() => {
-                           setMobileMenuOpen(false);
-                           handleLogout();
-                        }}
-                     >
-                        <LogOut className="w-4 h-4" />
-                        <span>Logout</span>
-                     </button>
-                  </div>
                </div>
             </div>
          )}

@@ -56,10 +56,14 @@ const Packages = () => {
             <Navigation />
 
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-               <div className="mb-12 text-center animate-slide-up">
-                  <h1 className="text-4xl font-bold text-foreground mb-4">
-                     VIP Investment Packages
-                  </h1>
+               <div className="text-center mb-16">
+                  <h2 className="text-3xl md:text-5xl font-bold mb-4">
+                     VIP Investment{' '}
+                     <span className="bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
+                        Packages
+                     </span>
+                  </h2>
+
                   <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                      Choose the package that fits your investment goals. All
                      packages include daily profits, referral bonuses, and
@@ -68,25 +72,33 @@ const Packages = () => {
                </div>
 
                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {items.map((pkg: any, index: number) => (
-                     <div
-                        key={pkg.id ?? index}
-                        className="animate-fade-in"
-                        style={{ animationDelay: `${index * 0.1}s` }}
-                     >
-                        <PackageCard
-                           name={pkg.name}
-                           amount={formatMoney(pkg.amountCents)}
-                           dailyProfit={`${(pkg.dailyProfitBps / 100).toFixed(2)}%`}
-                           duration={`${pkg.durationDays} days`}
-                           totalReturn={formatMoney(pkg.totalReturnBps * 100)}
-                           referralBonus={`${(pkg.referralBonusBps / 100).toFixed(2)}%`}
-                           featured={Boolean(pkg.featured)}
-                           features={pkg.features ?? []}
-                           onInvest={() => onInvestClick(pkg.id)}
-                        />
-                     </div>
-                  ))}
+                  {items.map((pkg: any, index: number) => {
+                     let color = ['green', 'blue', 'purple'];
+                     return (
+                        <div
+                           key={pkg.id ?? index}
+                           className="animate-fade-in"
+                           style={{ animationDelay: `${index * 0.1}s` }}
+                        >
+                           <PackageCard
+                              name={pkg.name}
+                              amount={formatMoney(pkg.amountCents)}
+                              dailyProfit={`${(pkg.dailyProfitBps / 100).toFixed(2)}%`}
+                              duration={`${pkg.durationDays} days`}
+                              totalReturn={formatMoney(
+                                 pkg.totalReturnBps * 100
+                              )}
+                              referralBonus={`${(pkg.referralBonusBps / 100).toFixed(2)}%`}
+                              // featured={Boolean(pkg.featured)}
+                              features={pkg.features ?? []}
+                              onInvest={() => onInvestClick(pkg.id)}
+                              color={
+                                 color[index % 3] as 'green' | 'blue' | 'purple'
+                              }
+                           />
+                        </div>
+                     );
+                  })}
                </div>
 
                <div className="mt-16 bg-card rounded-xl p-8 shadow-custom-md text-center">
