@@ -53,10 +53,29 @@ const Referrals = () => {
    console.log({ totalEarned, totalReferrals });
 
    return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-[#09090b] text-white overflow-hidden">
          <Navigation />
 
-         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+         <div className="fixed inset-0 pointer-events-none">
+            <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-violet-600/20 rounded-full blur-[120px] animate-pulse" />
+            <div
+               className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-fuchsia-600/15 rounded-full blur-[100px] animate-pulse"
+               style={{ animationDelay: '1s' }}
+            />
+            <div
+               className="absolute top-[40%] right-[20%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[80px] animate-pulse"
+               style={{ animationDelay: '2s' }}
+            />
+         </div>
+
+         <div
+            className="fixed inset-0 pointer-events-none opacity-[0.015]"
+            style={{
+               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            }}
+         />
+
+         <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-8 animate-slide-up">
                <h1 className="text-3xl font-bold text-foreground mb-2">
                   Referral Program
@@ -80,7 +99,7 @@ const Referrals = () => {
                   title="Total Earned"
                   value={totalEarned}
                   icon={DollarSign}
-                  trend="+$175 this week"
+                  trend="+Birr 175 this week"
                   trendUp={true}
                   variant="success"
                />
@@ -96,12 +115,12 @@ const Referrals = () => {
             <div className="grid lg:grid-cols-3 gap-6">
                {/* Referral Tools */}
                <div className="lg:col-span-2 space-y-6">
-                  <Card className="p-6 shadow-custom-md">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h2 className="text-xl font-semibold text-foreground mb-6">
                         Your Referral Link
                      </h2>
 
-                     <div className="bg-muted rounded-lg p-4 mb-4">
+                     <div className="bg-zinc-900/30 rounded-lg p-4 mb-4 border border-zinc-800">
                         <div className="flex items-center gap-2 mb-3">
                            <p className="text-sm text-muted-foreground">
                               Referral Code:
@@ -142,7 +161,7 @@ const Referrals = () => {
                   </Card>
 
                   {/* Referred Users */}
-                  <Card className="p-6 shadow-custom-md">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-semibold text-foreground">
                            Your Referrals
@@ -156,7 +175,7 @@ const Referrals = () => {
                         {referredUsers.map((user: any, index: number) => (
                            <div
                               key={index}
-                              className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
+                              className="flex items-center justify-between p-4 bg-zinc-900/30 rounded-lg hover:bg-zinc-900/40 transition-colors border border-zinc-800"
                            >
                               <div className="flex items-center gap-4">
                                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
@@ -187,7 +206,7 @@ const Referrals = () => {
 
                {/* Info Sidebar */}
                <div className="space-y-6">
-                  <Card className="p-6 shadow-custom-md bg-gradient-to-br from-blue-950 to-blue-900 text-primary-foreground">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h3 className="text-lg text-white font-semibold mb-4">
                         Commission Rates
                      </h3>
@@ -231,7 +250,7 @@ const Referrals = () => {
                      </div>
                   </Card>
 
-                  <Card className="p-6 shadow-custom-md">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h3 className="text-lg font-semibold text-foreground mb-4">
                         How It Works
                      </h3>
@@ -255,11 +274,11 @@ const Referrals = () => {
                      </ol>
                   </Card>
 
-                  <Card className="p-6 shadow-custom-md bg-blue-50 border border-green-400">
-                     <h3 className="text-lg font-semibold text-black mb-2">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
+                     <h3 className="text-lg font-semibold text-white mb-2">
                         Bonus Tip
                      </h3>
-                     <p className="text-sm text-secondary">
+                     <p className="text-sm text-foreground">
                         Referrals who invest in higher VIP packages earn you
                         more commission. Share the benefits of premium packages!
                      </p>

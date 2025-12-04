@@ -3,7 +3,13 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Wallet, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import {
+   Wallet,
+   Clock,
+   CheckCircle,
+   AlertCircle,
+   HelpCircle,
+} from 'lucide-react';
 import { useMyWallet } from '@/hooks/useWallet';
 import { useRequestWithdrawal, useWithdrawals } from '@/hooks/useWithdrawals';
 import { useState } from 'react';
@@ -23,7 +29,7 @@ const Withdraw = () => {
       e.preventDefault();
       const cents = Math.round(parseFloat(amount || '0') * 100);
       if (!cents || cents < 5000) {
-         toast.error('Minimum withdrawal is $50.00');
+         toast.error('Minimum withdrawal is 50.00 Birr');
          return;
       }
       try {
@@ -42,10 +48,29 @@ const Withdraw = () => {
    };
 
    return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-[#09090b] text-white overflow-hidden">
          <Navigation />
 
-         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+         <div className="fixed inset-0 pointer-events-none">
+            <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-violet-600/20 rounded-full blur-[120px] animate-pulse" />
+            <div
+               className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-fuchsia-600/15 rounded-full blur-[100px] animate-pulse"
+               style={{ animationDelay: '1s' }}
+            />
+            <div
+               className="absolute top-[40%] right-[20%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[80px] animate-pulse"
+               style={{ animationDelay: '2s' }}
+            />
+         </div>
+
+         <div
+            className="fixed inset-0 pointer-events-none opacity-[0.015]"
+            style={{
+               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            }}
+         />
+
+         <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-8 animate-slide-up">
                <h1 className="text-3xl font-bold text-foreground mb-2">
                   Withdraw Funds
@@ -58,12 +83,12 @@ const Withdraw = () => {
             <div className="grid lg:grid-cols-3 gap-6">
                {/* Withdrawal Form */}
                <div className="lg:col-span-2 space-y-6">
-                  <Card className="p-6 shadow-custom-md">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <div className="mb-6">
                         <h2 className="text-xl font-semibold text-foreground mb-4">
                            Available Balance
                         </h2>
-                        <div className="bg-gradient-to-r from-green-400 to-green-300 rounded-xl p-6 text-success-foreground">
+                        <div className="bg-gradient-to-r from-green-900 to-green-600 rounded-xl p-6 text-success-foreground">
                            <p className="text-sm text-white opacity-90 mb-1">
                               Total Available
                            </p>
@@ -141,7 +166,10 @@ const Withdraw = () => {
                         </div>
 
                         <Button
-                           className="w-full"
+                           className="w-full px-10  text-lg font-semibold rounded-2xl
+                            bg-gradient-to-r from-violet-600 to-fuchsia-600 
+                            hover:from-violet-500 hover:to-fuchsia-500 text-white 
+                            border-0 shadow-xl shadow-violet-600/30 transition-all"
                            size="lg"
                            type="submit"
                            disabled={request.isPending}
@@ -155,7 +183,7 @@ const Withdraw = () => {
                   </Card>
 
                   {/* Withdrawal History */}
-                  <Card className="p-6 shadow-custom-md">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h2 className="text-xl font-semibold text-foreground mb-6">
                         Withdrawal History
                      </h2>
@@ -164,7 +192,7 @@ const Withdraw = () => {
                            (withdrawal: any, index: number) => (
                               <div
                                  key={index}
-                                 className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
+                                 className="flex items-center justify-between p-4 bg-zinc-900/30 rounded-lg hover:bg-zinc-900/40 transition-colors border border-zinc-800"
                               >
                                  <div className="flex items-center gap-4">
                                     <div className="w-10 h-10 rounded-full bg-success-light flex items-center justify-center">
@@ -172,10 +200,10 @@ const Withdraw = () => {
                                     </div>
                                     <div>
                                        <p className="font-medium text-foreground">
+                                          Birr{' '}
                                           {(
                                              withdrawal.amountCents / 100
-                                          ).toLocaleString()}{' '}
-                                          Birr
+                                          ).toLocaleString()}
                                        </p>
                                        <p className="text-sm text-muted-foreground">
                                           {withdrawal.id}
@@ -203,7 +231,7 @@ const Withdraw = () => {
 
                {/* Info Sidebar */}
                <div className="space-y-6">
-                  <Card className="p-6 shadow-custom-md">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h3 className="text-lg font-semibold text-foreground mb-4">
                         Withdrawal Info
                      </h3>
@@ -244,7 +272,7 @@ const Withdraw = () => {
                      </div>
                   </Card>
 
-                  <Card className="p-6 shadow-custom-md bg-orange-50 border-orange-300">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <div className="flex gap-3">
                         <AlertCircle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
                         <h3 className="text-lg font-semibold text-foreground">
@@ -259,12 +287,17 @@ const Withdraw = () => {
                      </ul>
                   </Card>
 
-                  <Card className="p-6 shadow-custom-md bg-blue-950 text-primary-foreground">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h3 className="text-lg font-semibold">Need Help?</h3>
                      <p className="text-sm opacity-90 mb-4">
                         Our support team is available 24/7 to assist you
                      </p>
-                     <Button variant="secondary" className="w-full">
+                     <Button
+                        variant="outline"
+                        size="lg"
+                        className="border-zinc-700 bg-white/5 text-white px-8 h-12 text-base hover:bg-white/10 hover:text-white"
+                     >
+                        <HelpCircle className="w-4 h-4 mr-2" />
                         Contact Support
                      </Button>
                   </Card>

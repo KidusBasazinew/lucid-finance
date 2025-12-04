@@ -29,8 +29,27 @@ const Login = () => {
    };
 
    return (
-      <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-success/5 flex items-center justify-center p-4">
-         <Card className="w-full max-w-md p-8 shadow-custom-lg animate-slide-up bg-card text-card-foreground border border-border rounded-2xl">
+      <div className="min-h-screen bg-[#09090b] text-white overflow-hidden flex items-center justify-center p-4">
+         <div className="fixed inset-0 pointer-events-none">
+            <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-violet-600/20 rounded-full blur-[120px] animate-pulse" />
+            <div
+               className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-fuchsia-600/15 rounded-full blur-[100px] animate-pulse"
+               style={{ animationDelay: '1s' }}
+            />
+            <div
+               className="absolute top-[40%] right-[20%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[80px] animate-pulse"
+               style={{ animationDelay: '2s' }}
+            />
+         </div>
+
+         <div
+            className="fixed inset-0 pointer-events-none opacity-[0.015]"
+            style={{
+               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            }}
+         />
+
+         <Card className="w-full max-w-md p-8 shadow-custom-lg animate-slide-up bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm rounded-2xl">
             {/* Logo + Header */}
             <div className="text-center mb-8">
                <div className="w-16 h-16 rounded-xl gradient-primary flex items-center justify-center mx-auto mb-4 shadow-custom-md">

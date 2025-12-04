@@ -41,12 +41,29 @@ const Admin = () => {
    }
 
    return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-[#09090b] text-white overflow-hidden">
          <Navigation />
-         <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+         <div className="fixed inset-0 pointer-events-none">
+            <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-violet-600/20 rounded-full blur-[120px] animate-pulse" />
+            <div
+               className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-fuchsia-600/15 rounded-full blur-[100px] animate-pulse"
+               style={{ animationDelay: '1s' }}
+            />
+            <div
+               className="absolute top-[40%] right-[20%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[80px] animate-pulse"
+               style={{ animationDelay: '2s' }}
+            />
+         </div>
+         <div
+            className="fixed inset-0 pointer-events-none opacity-[0.015]"
+            style={{
+               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            }}
+         />
+         <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
             <h1 className="text-2xl font-semibold">Admin</h1>
 
-            <Card>
+            <Card className="bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                <CardHeader>
                   <CardTitle>Process Daily Profits</CardTitle>
                </CardHeader>
@@ -66,7 +83,7 @@ const Admin = () => {
                </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                <CardHeader>
                   <CardTitle>Approve Investment</CardTitle>
                </CardHeader>
@@ -89,7 +106,7 @@ const Admin = () => {
                                     {item.user?.phone}
                                  </div>
                                  <div className="text-muted-foreground">
-                                    Package: {item.package?.name} · Amount: $
+                                    Package: {item.package?.name} · Amount: Birr{' '}
                                     {(item.amountCents / 100).toLocaleString()}{' '}
                                     · Status: {item.status}
                                  </div>
@@ -149,7 +166,7 @@ const Admin = () => {
                </CardContent>
             </Card>
 
-            <Card>
+            <Card className="bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                <CardHeader>
                   <CardTitle>Manage Withdrawals</CardTitle>
                </CardHeader>
@@ -171,7 +188,7 @@ const Admin = () => {
                                     {wd.user?.lastName ?? ''} · {wd.user?.phone}
                                  </div>
                                  <div className="text-muted-foreground">
-                                    Amount: $
+                                    Amount: Birr{' '}
                                     {(wd.amountCents / 100).toLocaleString()} ·
                                     Dest: {wd.destination}
                                  </div>

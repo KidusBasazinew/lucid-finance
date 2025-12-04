@@ -101,17 +101,45 @@ const Packages = () => {
                   })}
                </div>
 
-               <div className="mt-16 bg-card rounded-xl p-8 shadow-custom-md text-center">
-                  <h2 className="text-2xl font-bold text-foreground mb-4">
-                     Need Help Choosing?
-                  </h2>
-                  <p className="text-muted-foreground mb-6">
-                     Our investment advisors are ready to help you select the
-                     perfect package for your goals
-                  </p>
-                  <button className="px-6 py-3 gradient-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity">
-                     Contact Support
-                  </button>
+               <div className="mt-16">
+                  <div
+                     className="relative rounded-3xl bg-gradient-to-br from-violet-600/20 via-fuchsia-600/10 to-cyan-600/20 
+                  border border-white/10 p-12 md:p-20 text-center overflow-hidden shadow-xl"
+                  >
+                     {/* Animated glowing background */}
+                     <div
+                        className="absolute inset-0 rounded-3xl bg-gradient-to-r 
+                      from-violet-500/20 via-fuchsia-500/20 to-cyan-500/20 blur-xl"
+                     />
+
+                     <div className="relative z-10">
+                        {/* Icon container (styled same as your rocket section) */}
+                        <div
+                           className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-600 
+                         flex items-center justify-center mx-auto mb-6 shadow-lg shadow-violet-500/30"
+                        >
+                           <span className="text-white text-3xl">💬</span>
+                        </div>
+
+                        <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                           Need Help Choosing?
+                        </h2>
+
+                        <p className="text-zinc-400 text-lg max-w-xl mx-auto mb-10">
+                           Our investment advisors are ready to help you select
+                           the perfect package for your goals.
+                        </p>
+
+                        <button
+                           className="px-10 h-14 text-lg font-semibold rounded-2xl
+                            bg-gradient-to-r from-violet-600 to-fuchsia-600 
+                            hover:from-violet-500 hover:to-fuchsia-500 text-white 
+                            border-0 shadow-xl shadow-violet-600/30 transition-all"
+                        >
+                           Contact Support
+                        </button>
+                     </div>
+                  </div>
                </div>
             </main>
          </div>

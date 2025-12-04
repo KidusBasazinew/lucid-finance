@@ -10,6 +10,7 @@ import {
    ArrowUpRight,
    Clock,
    Package,
+   Coins,
 } from 'lucide-react';
 import { useMyWallet } from '@/hooks/useWallet';
 import { useTransactions } from '@/hooks/useTransactions';
@@ -24,16 +25,37 @@ const Dashboard = () => {
    const { data: invPage } = useInvestments({ page: 1, limit: 10 });
    const recentTransactions = (txPage?.data ?? []).map((t: any) => ({
       type: t.type ?? 'Transaction',
-      amount: `${t.amountCents >= 0 ? '+' : '-'}$${Math.abs(t.amountCents / 100).toLocaleString()}`,
+      amount: `${t.amountCents >= 0 ? '+' : '-'}Birr ${Math.abs(t.amountCents / 100).toLocaleString()}`,
       date: t.createdAt ? new Date(t.createdAt).toLocaleString() : '',
       status: (t.status ?? 'completed').toString().toLowerCase(),
    }));
 
    return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-[#09090b] text-white overflow-hidden">
          <Navigation />
 
-         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+         {/* Animated gradient mesh background (copied from Home styling) */}
+         <div className="fixed inset-0 pointer-events-none">
+            <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-violet-600/20 rounded-full blur-[120px] animate-pulse" />
+            <div
+               className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-fuchsia-600/15 rounded-full blur-[100px] animate-pulse"
+               style={{ animationDelay: '1s' }}
+            />
+            <div
+               className="absolute top-[40%] right-[20%] w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[80px] animate-pulse"
+               style={{ animationDelay: '2s' }}
+            />
+         </div>
+
+         {/* Noise texture overlay */}
+         <div
+            className="fixed inset-0 pointer-events-none opacity-[0.015]"
+            style={{
+               backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+            }}
+         />
+
+         <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             {/* Welcome Section */}
             <div className="mb-8 animate-slide-up">
                <h1 className="text-3xl font-bold text-foreground mb-2">
@@ -48,7 +70,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
                <StatsCard
                   title="Total Balance"
-                  value={`$${((wallet?.balanceCents ?? 0) / 100).toLocaleString()}`}
+                  value={`Birr ${((wallet?.balanceCents ?? 0) / 100).toLocaleString()}`}
                   icon={Wallet}
                   trend="+12.5% this month"
                   trendUp={true}
@@ -82,7 +104,7 @@ const Dashboard = () => {
             <div className="grid lg:grid-cols-3 gap-6">
                {/* Active Packages */}
                <div className="lg:col-span-2 space-y-6">
-                  <Card className="p-6 shadow-custom-md">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/20 border border-zinc-800/40 backdrop-blur-sm rounded-2xl">
                      <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-semibold text-foreground">
                            Active Packages
@@ -95,14 +117,17 @@ const Dashboard = () => {
                      {(invPage?.data ?? [])
                         .slice(0, 1)
                         .map((inv: any, index: number) => (
-                           <div key={index} className="bg-muted rounded-xl p-6">
+                           <div
+                              key={index}
+                              className="bg-zinc-900/30 rounded-2xl p-6 border border-zinc-800/40"
+                           >
                               <div className="flex items-start justify-between mb-4">
                                  <div>
                                     <h3 className="text-lg font-semibold text-foreground mb-1">
                                        Active Investment
                                     </h3>
                                     <p className="text-sm text-muted-foreground">
-                                       Investment: $
+                                       Investment: Birr{' '}
                                        {(
                                           inv.amountCents / 100
                                        ).toLocaleString()}
@@ -110,15 +135,7 @@ const Dashboard = () => {
                                  </div>
                                  <div className="text-right">
                                     <p className="text-2xl font-bold text-green-400">
-                                       $
-                                       {Math.floor(
-                                          (inv.amountCents *
-                                             (inv.totalReturnCents
-                                                ? inv.totalReturnCents /
-                                                  inv.amountCents
-                                                : 1)) /
-                                             100
-                                       ).toLocaleString()}
+                                       Birr {inv.totalReturnCents}
                                     </p>
                                     <p className="text-sm text-muted-foreground">
                                        Total Return (plan)
@@ -127,20 +144,18 @@ const Dashboard = () => {
                               </div>
 
                               <div className="grid grid-cols-2 gap-4 mb-4">
-                                 <div className="bg-card rounded-lg p-3">
+                                 <div className="bg-zinc-900/20 rounded-lg p-3 border border-zinc-800/30 backdrop-blur-sm">
                                     <div className="flex items-center gap-2 mb-1">
-                                       <DollarSign className="w-4 h-4 text-green-400" />
+                                       <Coins className="w-4 h-4 text-green-400" />
                                        <p className="text-xs text-muted-foreground">
                                           Daily Profit (bps)
                                        </p>
                                     </div>
                                     <p className="text-lg font-semibold text-foreground">
-                                       {inv.dailyProfitBps
-                                          ? `${(inv.dailyProfitBps / 100).toFixed(2)}%`
-                                          : '—'}
+                                       {inv.dailyProfitBps} Birr
                                     </p>
                                  </div>
-                                 <div className="bg-card rounded-lg p-3">
+                                 <div className="bg-zinc-900/20 rounded-lg p-3 border border-zinc-800/30 backdrop-blur-sm">
                                     <div className="flex items-center gap-2 mb-1">
                                        <Clock className="w-4 h-4 text-primary" />
                                        <p className="text-xs text-muted-foreground">
@@ -174,7 +189,7 @@ const Dashboard = () => {
                   </Card>
 
                   {/* Recent Transactions */}
-                  <Card className="p-6 shadow-custom-md">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/20 border border-zinc-800/40 backdrop-blur-sm rounded-2xl">
                      <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-semibold text-foreground">
                            Recent Transactions
@@ -189,7 +204,7 @@ const Dashboard = () => {
                            (transaction: any, index: number) => (
                               <div
                                  key={index}
-                                 className="flex items-center justify-between p-4 bg-muted rounded-lg hover:bg-muted/80 transition-colors"
+                                 className="flex items-center justify-between p-4 bg-zinc-900/20 rounded-lg hover:bg-zinc-900/30 transition-colors border border-zinc-800/20"
                               >
                                  <div className="flex items-center gap-4">
                                     <div
@@ -253,7 +268,7 @@ const Dashboard = () => {
 
                {/* Quick Actions */}
                <div className="space-y-6">
-                  <Card className="p-6 shadow-custom-md">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/20 border border-zinc-800/40 backdrop-blur-sm rounded-2xl">
                      <h2 className="text-xl font-semibold text-foreground mb-6">
                         Quick Actions
                      </h2>
@@ -290,8 +305,8 @@ const Dashboard = () => {
                      </div>
                   </Card>
 
-                  <Card className="p-6 shadow-custom-md bg-gradient-to-br from-blue-950 to-blue-900 text-primary-foreground">
-                     <h3 className="text-lg text-white  font-semibold mb-2">
+                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800/40 backdrop-blur-sm rounded-2xl">
+                     <h3 className="text-lg text-white font-semibold mb-2">
                         Invite & Earn
                      </h3>
                      <p className="text-sm text-white opacity-90 mb-4">
