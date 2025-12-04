@@ -3,8 +3,10 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import cron from 'node-cron';
 import apiRouter from './routes';
 import { errorHandler, notFoundHandler } from './middlewares/error';
+import { investmentService } from './services/investment.service';
 
 dotenv.config();
 
@@ -41,6 +43,29 @@ app.use('/api/v1', apiRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
+
+// Schedule profit processing.
+// In test mode (PROFIT_TEST_MODE=true) it runs every minute.
+// Otherwise it runs once per day at 00:05 UTC.
+const profitTestMode = false;
+const cronExpr = '5 0 * * *';
+
+cron.schedule(
+   cronExpr,
+   async () => {
+      try {
+         await investmentService.processDailyProfits();
+         console.log(
+            `[CRON] Profits processed (${profitTestMode ? 'test mode' : 'daily'})`
+         );
+      } catch (err) {
+         console.error('[CRON] Failed to process profits', err);
+      }
+   },
+   {
+      timezone: 'UTC',
+   }
+);
 
 app.listen(port, () => {
    console.log(`Server is running on http://localhost:${port}`);

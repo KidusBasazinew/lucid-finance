@@ -188,43 +188,45 @@ const Referrals = () => {
                {/* Info Sidebar */}
                <div className="space-y-6">
                   <Card className="p-6 shadow-custom-md bg-gradient-to-br from-blue-950 to-blue-900 text-primary-foreground">
-                     <h3 className="text-lg font-semibold mb-4">
+                     <h3 className="text-lg text-white font-semibold mb-4">
                         Commission Rates
                      </h3>
                      <div className="space-y-3">
                         <div className="flex justify-between items-center">
-                           <span className="text-sm opacity-90">
+                           <span className="text-sm text-white opacity-90">
                               Starter VIP
                            </span>
-                           <span className="font-bold">5%</span>
+                           <span className="font-bold text-white">5%</span>
                         </div>
                         <div className="flex justify-between items-center">
-                           <span className="text-sm opacity-90">
+                           <span className="text-sm text-white opacity-90">
                               Growth VIP
                            </span>
-                           <span className="font-bold">6%</span>
+                           <span className="font-bold text-white">6%</span>
                         </div>
                         <div className="flex justify-between items-center">
-                           <span className="text-sm opacity-90">
+                           <span className="text-sm text-white opacity-90">
                               Premium VIP
                            </span>
-                           <span className="font-bold">7%</span>
+                           <span className="font-bold text-white">7%</span>
                         </div>
                         <div className="flex justify-between items-center">
-                           <span className="text-sm opacity-90">
+                           <span className="text-sm text-white opacity-90">
                               Professional VIP
                            </span>
-                           <span className="font-bold">8%</span>
+                           <span className="font-bold text-white">8%</span>
                         </div>
                         <div className="flex justify-between items-center">
-                           <span className="text-sm opacity-90">Elite VIP</span>
-                           <span className="font-bold">10%</span>
+                           <span className="text-sm text-white opacity-90">
+                              Elite VIP
+                           </span>
+                           <span className="font-bold text-white">10%</span>
                         </div>
                         <div className="flex justify-between items-center">
-                           <span className="text-sm opacity-90">
+                           <span className="text-sm text-white opacity-90">
                               Diamond VIP
                            </span>
-                           <span className="font-bold">12%</span>
+                           <span className="font-bold  text-white">12%</span>
                         </div>
                      </div>
                   </Card>
@@ -254,10 +256,10 @@ const Referrals = () => {
                   </Card>
 
                   <Card className="p-6 shadow-custom-md bg-blue-50 border border-green-400">
-                     <h3 className="text-lg font-semibold text-foreground mb-2">
+                     <h3 className="text-lg font-semibold text-black mb-2">
                         Bonus Tip
                      </h3>
-                     <p className="text-sm text-muted-foreground">
+                     <p className="text-sm text-secondary">
                         Referrals who invest in higher VIP packages earn you
                         more commission. Share the benefits of premium packages!
                      </p>

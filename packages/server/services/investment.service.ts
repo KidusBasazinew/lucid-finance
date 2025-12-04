@@ -9,6 +9,8 @@ import { prisma } from '../lib/prisma';
 import { InvestmentStatus } from '@prisma/client';
 import { transactionRepository } from '../repositories/transaction.repository';
 
+const PROFIT_TEST_MODE = process.env.PROFIT_TEST_MODE === 'true';
+
 export const investmentService = {
    async create(userId: string, input: { packageId: string }) {
       const pack = await packageRepository.findById(input.packageId);
@@ -42,7 +44,13 @@ export const investmentService = {
 
       const updated = await prisma.investment.update({
          where: { id: investmentId },
-         data: { status: 'ACTIVE', startDate: new Date() },
+         data: {
+            status: 'ACTIVE',
+            startDate: new Date(),
+            endDate: new Date(
+               new Date().getTime() + pack.durationDays * 24 * 60 * 60 * 1000
+            ),
+         },
       });
 
       // One-time referral bonus upon approval
@@ -83,45 +91,51 @@ export const investmentService = {
       const investments = await prisma.investment.findMany({
          where: { status: 'ACTIVE' },
       });
-      const today = new Date();
-      const ymd = (d: Date) =>
-         `${d.getUTCFullYear()}${String(d.getUTCMonth() + 1).padStart(2, '0')}${String(d.getUTCDate()).padStart(2, '0')}`;
-      const msPerDay = 24 * 60 * 60 * 1000;
-      const startOfUTC = (d: Date) =>
-         new Date(
-            Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate())
-         );
-      const todayUTC = startOfUTC(today);
+
+      const now = new Date();
+      const msPerDay = PROFIT_TEST_MODE ? 60 * 1000 : 24 * 60 * 60 * 1000;
+
       for (const inv of investments) {
          const pack = await packageRepository.findById(inv.packageId);
          if (!pack) continue;
-         const startUTC = startOfUTC(new Date(inv.startDate));
-         const elapsedDays = Math.floor(
-            (todayUTC.getTime() - startUTC.getTime()) / msPerDay
+
+         // Check end date first
+         if (inv.endDate && now >= new Date(inv.endDate)) {
+            await prisma.investment.update({
+               where: { id: inv.id },
+               data: { status: 'COMPLETED' },
+            });
+            continue;
+         }
+
+         const start = new Date(inv.startDate);
+         const daysElapsed = Math.floor(
+            (now.getTime() - start.getTime()) / msPerDay
          );
+
          const totalDays = pack.durationDays;
-         const dueDays = Math.min(elapsedDays, totalDays);
-         const dailyCents = Math.floor(
-            (inv.amountCents * inv.dailyProfitBps) / 10000
-         );
-         for (let i = 0; i < dueDays; i++) {
-            const creditDate = new Date(startUTC.getTime() + i * msPerDay);
-            const ref = `PROF-${inv.id}-${ymd(creditDate)}`;
+         const dueDays = Math.min(daysElapsed, totalDays);
+
+         const dailyCents = inv.dailyProfitBps * 100;
+
+         for (let d = 0; d < dueDays; d++) {
+            const dayDate = new Date(start.getTime() + d * msPerDay);
+            const ref = `PROF-${inv.id}-${dayDate.toISOString().slice(0, 10)}`;
+
             const exists = await transactionRepository.existsByReference(ref);
-            if (!exists) {
-               await walletRepository.increaseBalance(inv.userId, dailyCents);
-               await transactionService.create(inv.userId, {
-                  type: 'PROFIT' as any,
-                  amountCents: dailyCents,
-                  status: 'SUCCESS' as any,
-                  reference: ref,
-                  metadata: { investmentId: inv.id, date: ymd(creditDate) },
-               });
-            }
+            if (exists) continue;
+
+            await walletRepository.increaseBalance(inv.userId, dailyCents);
+            await transactionService.create(inv.userId, {
+               type: 'PROFIT',
+               amountCents: dailyCents,
+               status: 'SUCCESS',
+               reference: ref,
+               metadata: { investmentId: inv.id, date: dayDate },
+            });
          }
       }
    },
-
    async listByUser(userId: string, query: any) {
       const { page, limit, skip, sort, order } = getPagination(query);
       const { data, total } = await investmentRepository.listByUser(userId, {
