@@ -1,19 +1,12 @@
 import { Button } from '@/components/ui/button';
-import { Link, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import {
    TrendingUp,
    Shield,
    Users,
    Wallet,
    ArrowRight,
-   CheckCircle,
-   BarChart3,
-   DollarSign,
    Rocket,
-   Star,
-   CheckCircle2,
-   Trophy,
-   Crown,
    Play,
    BookOpen,
    Sparkles,

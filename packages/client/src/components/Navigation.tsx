@@ -13,8 +13,6 @@ import {
 import { useState } from 'react';
 import { useLogout, useMe } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router';
-// import { ModeToggle } from './mode-toggle';
-import { cn } from '@/lib/utils';
 import { SidebarLink } from './SideBarLink';
 
 const Navigation = () => {
