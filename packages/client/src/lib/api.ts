@@ -8,7 +8,7 @@ import {
    setRefreshToken,
 } from './auth';
 
-const baseURL = '/api/v1';
+const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 function createRaw(): AxiosInstance {
    const instance = axios.create({ baseURL, withCredentials: true });
