@@ -53,6 +53,16 @@ export const investmentService = {
          },
       });
 
+      // Credit the user's wallet with the investment amount on approval
+      await walletRepository.increaseBalance(inv.userId, inv.amountCents);
+      await transactionService.create(inv.userId, {
+         type: 'DEPOSIT' as any,
+         amountCents: inv.amountCents,
+         status: 'SUCCESS' as any,
+         reference: `INV-${inv.id}`,
+         metadata: { investmentId: inv.id, packageId: pack.id },
+      });
+
       // One-time referral bonus upon approval
       try {
          const user = await userRepository.findById(inv.userId);
