@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { useNavigate } from 'react-router';
+import { NavLink, useNavigate } from 'react-router';
 import {
    TrendingUp,
    Shield,
@@ -146,16 +146,16 @@ const Home = () => {
                      >
                         {[
                            {
-                              value: 3,
-                              label: 'Courses',
+                              value: 6,
+                              label: 'Packages',
                               icon: BookOpen,
                            },
                            {
-                              value: 10,
-                              label: 'Lessons',
+                              value: 15,
+                              label: 'Investment Duration',
                               icon: Play,
                            },
-                           { value: '10K+', label: 'Students', icon: Users },
+                           { value: '10K+', label: 'Investors', icon: Users },
                         ].map((stat) => (
                            <div
                               key={stat.label}
@@ -268,19 +268,21 @@ const Home = () => {
                            <Rocket className="w-8 h-8 text-white" />
                         </div>
                         <h2 className="text-3xl md:text-5xl font-bold mb-6">
-                           Ready to level up your skills?
+                           Ready to level up your investments?
                         </h2>
                         <p className="text-zinc-400 text-lg max-w-xl mx-auto mb-10">
-                           Start with free courses or unlock everything with Pro
-                           and Ultra. Your coding journey begins now.
+                           Start with small packages or unlock everything with
+                           Pro and Ultra. Your investment journey begins now.
                         </p>
-                        <Button
-                           size="lg"
-                           className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white border-0 shadow-xl shadow-violet-600/30 px-10 h-14 text-lg font-semibold"
-                        >
-                           View Pricing
-                           <ArrowRight className="w-5 h-5 ml-2" />
-                        </Button>
+                        <NavLink to="/packages">
+                           <Button
+                              size="lg"
+                              className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white border-0 shadow-xl shadow-violet-600/30 px-10 h-14 text-lg font-semibold"
+                           >
+                              View Pricing
+                              <ArrowRight className="w-5 h-5 ml-2" />
+                           </Button>
+                        </NavLink>
                      </div>
                   </div>
                </section>
