@@ -20,7 +20,7 @@ app.use(
       origin:
          process.env.CORS_ORIGIN ||
          'http://localhost:5173' ||
-         'https://lucid-finance.onrender.com',
+         'https://lucidfinance.vercel.app',
       credentials: true,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'Range'], // add Range for video streaming
