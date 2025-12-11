@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma/client"
+  // Use default output (node_modules/@prisma/client) so runtime imports work on Render.
 }
 
 datasource db {
