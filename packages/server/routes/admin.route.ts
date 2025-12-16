@@ -19,9 +19,9 @@ router.get('/investments/pending', async (_req, res) => {
    return ok(res, list, 'Pending investments');
 });
 
-router.post('/profits/process', async (_req, res) => {
+router.post('/calculate-profits', async (_req, res) => {
    await investmentService.processDailyProfits();
-   return ok(res, { processed: true }, 'Profits processed');
+   return ok(res, { processed: true }, 'Daily profits calculation completed');
 });
 
 router.patch('/withdrawals/:id/approve', async (req, res) => {

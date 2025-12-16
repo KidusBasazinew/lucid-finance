@@ -15,7 +15,7 @@ export function useApproveInvestment() {
 export function useProcessProfits() {
    return useMutation({
       mutationFn: async () => {
-         const res = await api.post('/admin/profits/process');
+         const res = await api.post('/admin/calculate-profits');
          return res.data?.data;
       },
    });

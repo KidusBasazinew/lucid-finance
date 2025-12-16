@@ -10,6 +10,7 @@ import { InvestmentStatus } from '@prisma/client';
 import { transactionRepository } from '../repositories/transaction.repository';
 
 const PROFIT_TEST_MODE = process.env.PROFIT_TEST_MODE === 'true';
+let PROFITS_PROCESSING = false; // simple in-memory lock for Render free tier
 
 export const investmentService = {
    async create(userId: string, input: { packageId: string }) {
@@ -21,9 +22,7 @@ export const investmentService = {
          package: { connect: { id: pack.id } },
          amountCents: pack.amountCents,
          dailyProfitBps: pack.dailyProfitBps,
-         totalReturnCents: Math.floor(
-            (pack.amountCents * pack.totalReturnBps) / 10000
-         ),
+         totalReturnCents: pack.totalReturnBps,
          endDate: null,
          // Using CANCELLED as a placeholder for pending until admin approves
          status: InvestmentStatus.CANCELLED,
@@ -98,52 +97,77 @@ export const investmentService = {
    },
 
    async processDailyProfits() {
-      const investments = await prisma.investment.findMany({
-         where: { status: 'ACTIVE' },
-      });
+      if (PROFITS_PROCESSING) {
+         return; // prevent concurrent runs
+      }
+      PROFITS_PROCESSING = true;
+      try {
+         const investments = await prisma.investment.findMany({
+            where: { status: 'ACTIVE' },
+         });
 
-      const now = new Date();
-      const msPerDay = PROFIT_TEST_MODE ? 60 * 1000 : 24 * 60 * 60 * 1000;
+         const now = new Date();
+         const msPerDay = PROFIT_TEST_MODE ? 60 * 1000 : 24 * 60 * 60 * 1000;
 
-      for (const inv of investments) {
-         const pack = await packageRepository.findById(inv.packageId);
-         if (!pack) continue;
+         for (const inv of investments) {
+            const pack = await packageRepository.findById(inv.packageId);
+            if (!pack) continue;
 
-         // Check end date first
-         if (inv.endDate && now >= new Date(inv.endDate)) {
-            await prisma.investment.update({
-               where: { id: inv.id },
-               data: { status: 'COMPLETED' },
-            });
-            continue;
+            // Check end date first
+            if (inv.endDate && now >= new Date(inv.endDate)) {
+               await prisma.investment.update({
+                  where: { id: inv.id },
+                  data: { status: 'COMPLETED' },
+               });
+               continue;
+            }
+
+            // Determine the first unpaid day using lastProfitDate
+            const startDate = new Date(inv.startDate);
+            const lastPaid = inv.lastProfitDate
+               ? new Date(inv.lastProfitDate)
+               : null;
+            const firstUnpaidDate = lastPaid
+               ? new Date(lastPaid.getTime() + msPerDay)
+               : startDate;
+
+            const totalDays = pack.durationDays;
+            const daysSinceStart = Math.floor(
+               (now.getTime() - startDate.getTime()) / msPerDay
+            );
+            const maxPayableDays = Math.min(daysSinceStart, totalDays);
+
+            const dailyCents = inv.dailyProfitBps * 100;
+
+            // Iterate day-by-day from firstUnpaidDate up to now, stopping at expiry
+            for (let i = 0; i < maxPayableDays; i++) {
+               const dayDate = new Date(startDate.getTime() + i * msPerDay);
+               if (dayDate < firstUnpaidDate) continue; // already paid
+               if (inv.endDate && dayDate > new Date(inv.endDate)) break; // past expiry
+
+               const ref = `PROF-${inv.id}-${dayDate.toISOString().slice(0, 10)}`;
+               const exists =
+                  await transactionRepository.existsByReference(ref);
+               if (exists) continue; // idempotent: skip duplicates
+
+               await walletRepository.increaseBalance(inv.userId, dailyCents);
+               await transactionService.create(inv.userId, {
+                  type: 'PROFIT',
+                  amountCents: dailyCents,
+                  status: 'SUCCESS',
+                  reference: ref,
+                  metadata: { investmentId: inv.id, date: dayDate },
+               });
+
+               // Track lastProfitDate to speed future runs and avoid double-credit
+               await prisma.investment.update({
+                  where: { id: inv.id },
+                  data: { lastProfitDate: dayDate },
+               });
+            }
          }
-
-         const start = new Date(inv.startDate);
-         const daysElapsed = Math.floor(
-            (now.getTime() - start.getTime()) / msPerDay
-         );
-
-         const totalDays = pack.durationDays;
-         const dueDays = Math.min(daysElapsed, totalDays);
-
-         const dailyCents = inv.dailyProfitBps * 100;
-
-         for (let d = 0; d < dueDays; d++) {
-            const dayDate = new Date(start.getTime() + d * msPerDay);
-            const ref = `PROF-${inv.id}-${dayDate.toISOString().slice(0, 10)}`;
-
-            const exists = await transactionRepository.existsByReference(ref);
-            if (exists) continue;
-
-            await walletRepository.increaseBalance(inv.userId, dailyCents);
-            await transactionService.create(inv.userId, {
-               type: 'PROFIT',
-               amountCents: dailyCents,
-               status: 'SUCCESS',
-               reference: ref,
-               metadata: { investmentId: inv.id, date: dayDate },
-            });
-         }
+      } finally {
+         PROFITS_PROCESSING = false;
       }
    },
    async listByUser(userId: string, query: any) {
