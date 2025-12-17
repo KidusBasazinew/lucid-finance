@@ -14,8 +14,10 @@ import {
 import PackageCard from '@/components/PackageCard';
 import { usePackages } from '@/hooks/usePackages';
 import Navigation from '@/components/Navigation';
+import { useI18n } from '@/i18n';
 
 const Home = () => {
+   const { t } = useI18n();
    const { data: pkg } = usePackages({ page: 1, limit: 50, active: true });
    const items = pkg?.data ?? [];
    const router = useNavigate();
@@ -24,27 +26,35 @@ const Home = () => {
    const benefits = [
       {
          icon: TrendingUp,
-         title: 'Daily Profits',
-         description:
-            'Earn consistent daily returns on your investment with transparent tracking',
+         title: t('home.benefit.daily.title', 'Daily Profits'),
+         description: t(
+            'home.benefit.daily.desc',
+            'Earn consistent daily returns on your investment with transparent tracking'
+         ),
       },
       {
          icon: Shield,
-         title: 'Secure Platform',
-         description:
-            'Bank-level security with encrypted transactions and data protection',
+         title: t('home.benefit.secure.title', 'Secure Platform'),
+         description: t(
+            'home.benefit.secure.desc',
+            'Bank-level security with encrypted transactions and data protection'
+         ),
       },
       {
          icon: Users,
-         title: 'Referral Rewards',
-         description:
-            'Earn extra income by referring friends and building your network',
+         title: t('home.benefit.referral.title', 'Referral Rewards'),
+         description: t(
+            'home.benefit.referral.desc',
+            'Earn extra income by referring friends and building your network'
+         ),
       },
       {
          icon: Wallet,
-         title: 'Fast Withdrawals',
-         description:
-            'Quick and hassle-free withdrawal process with multiple payment options',
+         title: t('home.benefit.withdrawals.title', 'Fast Withdrawals'),
+         description: t(
+            'home.benefit.withdrawals.desc',
+            'Quick and hassle-free withdrawal process with multiple payment options'
+         ),
       },
    ];
 
@@ -84,7 +94,7 @@ const Home = () => {
                      >
                         <Sparkles className="w-4 h-4 text-violet-400" />
                         <span className="text-sm text-violet-300">
-                           Invest today before ends
+                           {t('home.badge', 'Invest today before ends')}
                         </span>
                      </div>
 
@@ -94,10 +104,10 @@ const Home = () => {
                         style={{ animationDelay: '0.2s' }}
                      >
                         <span className="block text-white">
-                           Invest Smart Get{' '}
+                           {t('home.headline1', 'Invest Smart Get')}{' '}
                         </span>
                         <span className="block bg-gradient-to-r from-violet-400 via-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
-                           Profit Daily
+                           {t('home.headline2', 'Profit Daily')}
                         </span>
                      </h1>
 
@@ -106,12 +116,10 @@ const Home = () => {
                         className="text-lg md:text-xl text-zinc-400 max-w-2xl mb-10 leading-relaxed animate-fade-in"
                         style={{ animationDelay: '0.3s' }}
                      >
-                        Join thousands of investors earning consistent daily
-                        returns with our premium VIP investment packages.
-                        <span className="text-fuchsia-400">
-                           Secure, transparent,
-                        </span>{' '}
-                        and <span className="text-cyan-400">profitable.</span>.
+                        {t(
+                           'home.subheadline',
+                           'Join thousands of investors earning consistent daily returns with our premium VIP investment packages. Secure, transparent, and profitable.'
+                        )}
                      </p>
 
                      {/* CTA Buttons */}
@@ -124,8 +132,7 @@ const Home = () => {
                               size="lg"
                               className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white border-0 shadow-xl shadow-violet-600/30 px-8 h-12 text-base font-semibold"
                            >
-                              {/* <LayoutDashboard className="w-4 h-4 mr-2" /> */}
-                              Start Investing Now
+                              {t('home.ctaPrimary', 'Start Investing Now')}
                            </Button>
 
                            <Button
@@ -134,7 +141,7 @@ const Home = () => {
                               className="border-zinc-700 bg-white/5 text-white px-8 h-12 text-base hover:bg-white/10 hover:text-white"
                            >
                               <BookOpen className="w-4 h-4 mr-2" />
-                              View Packages
+                              {t('home.ctaSecondary', 'View Packages')}
                            </Button>
                         </>
                      </div>
@@ -147,15 +154,22 @@ const Home = () => {
                         {[
                            {
                               value: 6,
-                              label: 'Packages',
+                              label: t('home.statPackages', 'Packages'),
                               icon: BookOpen,
                            },
                            {
                               value: 15,
-                              label: 'Investment Duration',
+                              label: t(
+                                 'home.statDuration',
+                                 'Investment Duration'
+                              ),
                               icon: Play,
                            },
-                           { value: '10K+', label: 'Investors', icon: Users },
+                           {
+                              value: '10K+',
+                              label: t('home.statInvestors', 'Investors'),
+                              icon: Users,
+                           },
                         ].map((stat) => (
                            <div
                               key={stat.label}
@@ -217,16 +231,17 @@ const Home = () => {
                   {/* Title */}
                   <div className="text-center mb-16">
                      <h2 className="text-3xl md:text-5xl font-bold mb-4">
-                        Why Choose{' '}
+                        {t('home.whyTitle', 'Why Choose')}{' '}
                         <span className="bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
                            LUCID FINANCE
                         </span>
                      </h2>
 
                      <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                        Built on trust, transparency, and proven results.
-                        Experience the difference of professional investment
-                        management.
+                        {t(
+                           'home.whySubtitle',
+                           'Built on trust, transparency, and proven results. Experience the difference of professional investment management.'
+                        )}
                      </p>
                   </div>
 
@@ -268,18 +283,23 @@ const Home = () => {
                            <Rocket className="w-8 h-8 text-white" />
                         </div>
                         <h2 className="text-3xl md:text-5xl font-bold mb-6">
-                           Ready to level up your investments?
+                           {t(
+                              'home.cta2.title',
+                              'Ready to level up your investments?'
+                           )}
                         </h2>
                         <p className="text-zinc-400 text-lg max-w-xl mx-auto mb-10">
-                           Start with small packages or unlock everything with
-                           Pro and Ultra. Your investment journey begins now.
+                           {t(
+                              'home.cta2.body',
+                              'Start with small packages or unlock everything with Pro and Ultra. Your investment journey begins now.'
+                           )}
                         </p>
                         <NavLink to="/packages">
                            <Button
                               size="lg"
                               className="bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-500 hover:to-fuchsia-500 text-white border-0 shadow-xl shadow-violet-600/30 px-10 h-14 text-lg font-semibold"
                            >
-                              View Pricing
+                              {t('home.cta2.button', 'View Pricing')}
                               <ArrowRight className="w-5 h-5 ml-2" />
                            </Button>
                         </NavLink>
@@ -292,7 +312,12 @@ const Home = () => {
          <footer className="border-t border-border py-12 bg-card">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                <div className="text-center text-muted-foreground">
-                  <p>&copy; 2024 VIP Invest. All rights reserved.</p>
+                  <p>
+                     {t(
+                        'home.footer',
+                        '© 2024 VIP Invest. All rights reserved.'
+                     )}
+                  </p>
                </div>
             </div>
          </footer>

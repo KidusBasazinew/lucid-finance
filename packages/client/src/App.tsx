@@ -12,66 +12,69 @@ import { TooltipProvider } from './components/ui/tooltip';
 import { Toaster as Sonner, Toaster } from '@/components/ui/sonner';
 import Home from './pages/Home';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import { I18nProvider } from './i18n';
 
 const queryClient = new QueryClient();
 
 const App = () => {
    return (
       <QueryClientProvider client={queryClient}>
-         <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-               <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
-                  <Route
-                     path="/dashboard"
-                     element={
-                        <ProtectedRoute>
-                           <Dashboard />
-                        </ProtectedRoute>
-                     }
-                  />
-                  <Route path="/packages" element={<Packages />} />
-                  <Route
-                     path="/withdraw"
-                     element={
-                        <ProtectedRoute>
-                           <Withdraw />
-                        </ProtectedRoute>
-                     }
-                  />
-                  <Route
-                     path="/referrals"
-                     element={
-                        <ProtectedRoute>
-                           <Referrals />
-                        </ProtectedRoute>
-                     }
-                  />
-                  <Route
-                     path="/profile"
-                     element={
-                        <ProtectedRoute>
-                           <Profile />
-                        </ProtectedRoute>
-                     }
-                  />
-                  <Route
-                     path="/admin"
-                     element={
-                        <ProtectedRoute>
-                           <Admin />
-                        </ProtectedRoute>
-                     }
-                  />
-                  {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                  {/* <Route path="*" element={<NotFound />} /> */}
-               </Routes>
-            </BrowserRouter>
-         </TooltipProvider>
+         <I18nProvider>
+            <TooltipProvider>
+               <Toaster />
+               <Sonner />
+               <BrowserRouter>
+                  <Routes>
+                     <Route path="/" element={<Home />} />
+                     <Route path="/login" element={<Login />} />
+                     <Route path="/register" element={<Register />} />
+                     <Route
+                        path="/dashboard"
+                        element={
+                           <ProtectedRoute>
+                              <Dashboard />
+                           </ProtectedRoute>
+                        }
+                     />
+                     <Route path="/packages" element={<Packages />} />
+                     <Route
+                        path="/withdraw"
+                        element={
+                           <ProtectedRoute>
+                              <Withdraw />
+                           </ProtectedRoute>
+                        }
+                     />
+                     <Route
+                        path="/referrals"
+                        element={
+                           <ProtectedRoute>
+                              <Referrals />
+                           </ProtectedRoute>
+                        }
+                     />
+                     <Route
+                        path="/profile"
+                        element={
+                           <ProtectedRoute>
+                              <Profile />
+                           </ProtectedRoute>
+                        }
+                     />
+                     <Route
+                        path="/admin"
+                        element={
+                           <ProtectedRoute>
+                              <Admin />
+                           </ProtectedRoute>
+                        }
+                     />
+                     {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+                     {/* <Route path="*" element={<NotFound />} /> */}
+                  </Routes>
+               </BrowserRouter>
+            </TooltipProvider>
+         </I18nProvider>
       </QueryClientProvider>
    );
 };

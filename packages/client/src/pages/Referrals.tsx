@@ -2,6 +2,7 @@ import Navigation from '@/components/Navigation';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useI18n } from '@/i18n';
 import {
    Users,
    DollarSign,
@@ -17,6 +18,7 @@ import { useMe } from '@/hooks/useAuth';
 import { isAuthenticated } from '@/lib/auth';
 
 const Referrals = () => {
+   const { t } = useI18n();
    const [copied, setCopied] = useState(false);
    const { data: me } = useMe();
    const { data: rPage } = useReferralsHook(
@@ -78,36 +80,39 @@ const Referrals = () => {
          <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-8 animate-slide-up">
                <h1 className="text-3xl font-bold text-foreground mb-2">
-                  Referral Program
+                  {t('referrals.title', 'Referral Program')}
                </h1>
                <p className="text-muted-foreground">
-                  Invite friends and earn commission on their investments
+                  {t(
+                     'referrals.subtitle',
+                     'Invite friends and earn commission on their investments'
+                  )}
                </p>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                <StatsCard
-                  title="Total Referrals"
+                  title={t('referrals.totalReferrals', 'Total Referrals')}
                   value={`${rPage?.total ?? 0}`}
                   icon={Users}
-                  trend="+3 this month"
+                  trend={t('referrals.trendReferrals', '+3 this month')}
                   trendUp={true}
                   variant="default"
                />
                <StatsCard
-                  title="Total Earned"
+                  title={t('referrals.totalEarned', 'Total Earned')}
                   value={totalEarned}
                   icon={DollarSign}
-                  trend="+Birr 175 this week"
+                  trend={t('referrals.trendEarned', '+Birr 175 this week')}
                   trendUp={true}
                   variant="success"
                />
                <StatsCard
-                  title="Active Referrals"
+                  title={t('referrals.activeReferrals', 'Active Referrals')}
                   value={totalReferrals}
                   icon={TrendingUp}
-                  trend="62.5% rate"
+                  trend={t('referrals.trendActive', '62.5% rate')}
                   variant="accent"
                />
             </div>
@@ -117,13 +122,13 @@ const Referrals = () => {
                <div className="lg:col-span-2 space-y-6">
                   <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h2 className="text-xl font-semibold text-foreground mb-6">
-                        Your Referral Link
+                        {t('referrals.yourLink', 'Your Referral Link')}
                      </h2>
 
                      <div className="bg-zinc-900/30 rounded-lg p-4 mb-4 border border-zinc-800">
                         <div className="flex items-center gap-2 mb-3">
                            <p className="text-sm text-muted-foreground">
-                              Referral Code:
+                              {t('referrals.code', 'Referral Code:')}
                            </p>
                            <code className="text-lg font-mono font-bold text-primary">
                               {referralCode}
@@ -151,11 +156,11 @@ const Referrals = () => {
                      <div className="grid grid-cols-2 gap-3">
                         <Button variant="outline" className="gap-2">
                            <Share2 className="w-4 h-4" />
-                           Share on Social
+                           {t('referrals.shareSocial', 'Share on Social')}
                         </Button>
                         <Button variant="outline" className="gap-2">
                            <Copy className="w-4 h-4" />
-                           Copy Code
+                           {t('referrals.copyCode', 'Copy Code')}
                         </Button>
                      </div>
                   </Card>
@@ -164,10 +169,10 @@ const Referrals = () => {
                   <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-semibold text-foreground">
-                           Your Referrals
+                           {t('referrals.listTitle', 'Your Referrals')}
                         </h2>
                         <Button variant="outline" size="sm">
-                           View All
+                           {t('referrals.viewAll', 'View All')}
                         </Button>
                      </div>
 
@@ -208,7 +213,7 @@ const Referrals = () => {
                <div className="space-y-6">
                   <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h3 className="text-lg text-white font-semibold mb-4">
-                        Commission Rates
+                        {t('referrals.commissionRates', 'Commission Rates')}
                      </h3>
                      <div className="space-y-3">
                         <div className="flex justify-between items-center">
@@ -252,35 +257,57 @@ const Referrals = () => {
 
                   <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h3 className="text-lg font-semibold text-foreground mb-4">
-                        How It Works
+                        {t('referrals.howItWorks', 'How It Works')}
                      </h3>
                      <ol className="space-y-3 text-sm text-muted-foreground">
                         <li className="flex gap-2">
                            <span className="font-bold text-blue-950">1.</span>
-                           <span>Share your unique referral link</span>
+                           <span>
+                              {t(
+                                 'referrals.step1',
+                                 'Share your unique referral link'
+                              )}
+                           </span>
                         </li>
                         <li className="flex gap-2">
                            <span className="font-bold text-blue-950">2.</span>
-                           <span>Friends sign up using your link</span>
+                           <span>
+                              {t(
+                                 'referrals.step2',
+                                 'Friends sign up using your link'
+                              )}
+                           </span>
                         </li>
                         <li className="flex gap-2">
                            <span className="font-bold text-blue-950">3.</span>
-                           <span>They make their first investment</span>
+                           <span>
+                              {t(
+                                 'referrals.step3',
+                                 'They make their first investment'
+                              )}
+                           </span>
                         </li>
                         <li className="flex gap-2">
                            <span className="font-bold text-blue-950">4.</span>
-                           <span>You earn commission immediately</span>
+                           <span>
+                              {t(
+                                 'referrals.step4',
+                                 'You earn commission immediately'
+                              )}
+                           </span>
                         </li>
                      </ol>
                   </Card>
 
                   <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h3 className="text-lg font-semibold text-white mb-2">
-                        Bonus Tip
+                        {t('referrals.bonusTip', 'Bonus Tip')}
                      </h3>
                      <p className="text-sm text-foreground">
-                        Referrals who invest in higher VIP packages earn you
-                        more commission. Share the benefits of premium packages!
+                        {t(
+                           'referrals.bonusCopy',
+                           'Referrals who invest in higher VIP packages earn you more commission. Share the benefits of premium packages!'
+                        )}
                      </p>
                   </Card>
                </div>

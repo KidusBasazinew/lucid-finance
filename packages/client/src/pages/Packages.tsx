@@ -5,6 +5,7 @@ import { useCreateInvestment } from '@/hooks/useInvestments';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router';
 import { isAuthenticated } from '@/lib/auth';
+import { useI18n } from '@/i18n';
 
 import { useState } from 'react';
 import {
@@ -17,6 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 
 const Packages = () => {
+   const { t } = useI18n();
    const navigate = useNavigate();
    const { data: page } = usePackages({ page: 1, limit: 50, active: true });
    const invest = useCreateInvestment();
@@ -41,11 +43,13 @@ const Packages = () => {
       if (!selectedId) return;
       try {
          await invest.mutateAsync({ packageId: selectedId });
-         toast.success('Investment created');
+         toast.success(t('packages.toastSuccess', 'Investment created'));
          setOpen(false);
          navigate('/dashboard');
       } catch (e: any) {
-         const msg = e?.response?.data?.message || 'Failed to invest';
+         const msg =
+            e?.response?.data?.message ||
+            t('packages.toastFail', 'Failed to invest');
          toast.error(msg);
       }
    };
@@ -58,16 +62,17 @@ const Packages = () => {
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                <div className="text-center mb-16">
                   <h2 className="text-3xl md:text-5xl font-bold mb-4">
-                     VIP Investment{' '}
+                     {t('packages.title', 'VIP Investment')}{' '}
                      <span className="bg-gradient-to-r from-fuchsia-400 to-cyan-400 bg-clip-text text-transparent">
-                        Packages
+                        {t('packages.titleHighlight', 'Packages')}
                      </span>
                   </h2>
 
                   <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                     Choose the package that fits your investment goals. All
-                     packages include daily profits, referral bonuses, and
-                     secure withdrawals.
+                     {t(
+                        'packages.subtitle',
+                        'Choose the package that fits your investment goals. All packages include daily profits, referral bonuses, and secure withdrawals.'
+                     )}
                   </p>
                </div>
 
@@ -122,12 +127,14 @@ const Packages = () => {
                         </div>
 
                         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                           Need Help Choosing?
+                           {t('packages.helpTitle', 'Need Help Choosing?')}
                         </h2>
 
                         <p className="text-zinc-400 text-lg max-w-xl mx-auto mb-10">
-                           Our investment advisors are ready to help you select
-                           the perfect package for your goals.
+                           {t(
+                              'packages.helpBody',
+                              'Our investment advisors are ready to help you select the perfect package for your goals.'
+                           )}
                         </p>
 
                         <button
@@ -136,7 +143,7 @@ const Packages = () => {
                             hover:from-violet-500 hover:to-fuchsia-500 text-white 
                             border-0 shadow-xl shadow-violet-600/30 transition-all"
                         >
-                           Contact Support
+                           {t('packages.helpCta', 'Contact Support')}
                         </button>
                      </div>
                   </div>
@@ -146,12 +153,17 @@ const Packages = () => {
          <Dialog open={open} onOpenChange={setOpen}>
             <DialogContent>
                <DialogHeader>
-                  <DialogTitle>Complete Payment</DialogTitle>
+                  <DialogTitle>
+                     {t('packages.dialogTitle', 'Complete Payment')}
+                  </DialogTitle>
                </DialogHeader>
 
                <div className="space-y-4 text-center">
                   <p className="text-muted-foreground">
-                     Pay using TeleBirr by scanning theQR code below
+                     {t(
+                        'packages.dialogPay',
+                        'Pay using TeleBirr by scanning the QR code below'
+                     )}
                   </p>
 
                   {/* TeleBirr QR Code */}
@@ -162,17 +174,20 @@ const Packages = () => {
                   />
 
                   <p className="text-sm text-muted-foreground">
-                     After paying, click “Confirm Payment”
+                     {t(
+                        'packages.dialogAfterPay',
+                        'After paying, click "Confirm Payment"'
+                     )}
                   </p>
                </div>
 
                <DialogFooter>
                   <Button variant="outline" onClick={() => setOpen(false)}>
-                     Cancel
+                     {t('packages.dialogCancel', 'Cancel')}
                   </Button>
 
                   <Button onClick={confirmPayment}>
-                     I have paid — Confirm
+                     {t('packages.dialogConfirm', 'I have paid — Confirm')}
                   </Button>
                </DialogFooter>
             </DialogContent>

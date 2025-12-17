@@ -7,6 +7,7 @@ import { TrendingUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useRegister } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { useI18n } from '@/i18n';
 
 const Register = () => {
    const [fullName, setFullName] = useState('');
@@ -17,6 +18,7 @@ const Register = () => {
    const [referral, setReferral] = useState('');
    const reg = useRegister();
    const navigate = useNavigate();
+   const { t } = useI18n();
 
    const [searchParams] = useSearchParams();
 
@@ -77,10 +79,13 @@ const Register = () => {
                   <TrendingUp className="w-8 h-8 text-primary-foreground" />
                </div>
                <h1 className="text-3xl font-bold text-foreground mb-2">
-                  Create Account
+                  {t('auth.createAccount', 'Create Account')}
                </h1>
                <p className="text-muted-foreground">
-                  Start your investment journey today
+                  {t(
+                     'auth.startJourney',
+                     'Start your investment journey today'
+                  )}
                </p>
             </div>
 
@@ -164,18 +169,20 @@ const Register = () => {
                   type="submit"
                   disabled={reg.isPending}
                >
-                  {reg.isPending ? 'Creating...' : 'Create Account'}
+                  {reg.isPending
+                     ? `${t('auth.createAccount', 'Create Account')}...`
+                     : t('auth.createAccount', 'Create Account')}
                </Button>
             </form>
 
             <div className="mt-6 text-center">
                <p className="text-sm text-muted-foreground">
-                  Already have an account?{' '}
+                  {t('auth.haveAccount', 'Already have an account?')}{' '}
                   <Link
                      to="/login"
                      className="text-primary font-medium hover:underline"
                   >
-                     Log in
+                     {t('auth.loginInstead', 'Log in')}
                   </Link>
                </p>
             </div>

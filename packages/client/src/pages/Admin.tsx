@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useI18n } from '@/i18n';
 import { useMe } from '@/hooks/useAuth';
 import {
    useApproveInvestment,
@@ -18,6 +19,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 const Admin = () => {
+   const { t } = useI18n();
    const { data: me } = useMe();
    const navigate = useNavigate();
 
@@ -61,37 +63,49 @@ const Admin = () => {
             }}
          />
          <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-            <h1 className="text-2xl font-semibold">Admin</h1>
+            <h1 className="text-2xl font-semibold">
+               {t('admin.title', 'Admin')}
+            </h1>
 
             <Card className="bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                <CardHeader>
-                  <CardTitle>Process Daily Profits</CardTitle>
+                  <CardTitle>
+                     {t('admin.processProfits', 'Process Daily Profits')}
+                  </CardTitle>
                </CardHeader>
                <CardContent className="flex items-center gap-3">
                   <Button
                      onClick={() => processProfits.mutate()}
                      disabled={processProfits.isPending}
                   >
-                     {processProfits.isPending ? 'Processing…' : 'Run Job Now'}
+                     {processProfits.isPending
+                        ? t('admin.processing', 'Processing…')
+                        : t('admin.runJob', 'Run Job Now')}
                   </Button>
                   {processProfits.isSuccess && (
-                     <span className="text-sm text-green-500">Done</span>
+                     <span className="text-sm text-green-500">
+                        {t('admin.done', 'Done')}
+                     </span>
                   )}
                   {processProfits.isError && (
-                     <span className="text-sm text-red-500">Failed</span>
+                     <span className="text-sm text-red-500">
+                        {t('admin.failed', 'Failed')}
+                     </span>
                   )}
                </CardContent>
             </Card>
 
             <Card className="bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                <CardHeader>
-                  <CardTitle>Approve Investment</CardTitle>
+                  <CardTitle>
+                     {t('admin.approveInvestment', 'Approve Investment')}
+                  </CardTitle>
                </CardHeader>
                <CardContent>
                   {/* Pending list */}
                   <div className="mb-4">
                      <div className="text-sm text-muted-foreground mb-2">
-                        Pending Investments
+                        {t('admin.pendingInvestments', 'Pending Investments')}
                      </div>
                      <div className="space-y-2">
                         {(pendingInv.data ?? []).map((item: any) => (
@@ -106,9 +120,12 @@ const Admin = () => {
                                     {item.user?.phone}
                                  </div>
                                  <div className="text-muted-foreground">
-                                    Package: {item.package?.name} · Amount: Birr{' '}
+                                    {t('admin.package', 'Package:')}{' '}
+                                    {item.package?.name} ·{' '}
+                                    {t('admin.amount', 'Amount:')} Birr{' '}
                                     {(item.amountCents / 100).toLocaleString()}{' '}
-                                    · Status: {item.status}
+                                    · {t('admin.status', 'Status:')}{' '}
+                                    {item.status}
                                  </div>
                               </div>
                               <Button
@@ -117,22 +134,26 @@ const Admin = () => {
                                     approveInvestment.mutate(item.id)
                                  }
                               >
-                                 Approve
+                                 {t('admin.approve', 'Approve')}
                               </Button>
                            </div>
                         ))}
                         {pendingInv.isLoading && (
-                           <div className="text-sm">Loading…</div>
+                           <div className="text-sm">
+                              {t('admin.loading', 'Loading…')}
+                           </div>
                         )}
                         {pendingInv.isError && (
                            <div className="text-sm text-red-500">
-                              Failed to load
+                              {t('admin.failedLoad', 'Failed to load')}
                            </div>
                         )}
                      </div>
                   </div>
                   <div className="grid gap-3 max-w-md">
-                     <Label htmlFor="invId">Investment ID</Label>
+                     <Label htmlFor="invId">
+                        {t('admin.investmentId', 'Investment ID')}
+                     </Label>
                      <Input
                         id="invId"
                         placeholder="investment id"
@@ -150,12 +171,12 @@ const Admin = () => {
                            }
                         >
                            {approveInvestment.isPending
-                              ? 'Approving…'
-                              : 'Approve'}
+                              ? t('admin.processing', 'Processing…')
+                              : t('admin.approve', 'Approve')}
                         </Button>
                         {approveInvestment.isSuccess && (
                            <span className="text-sm text-green-500">
-                              Approved
+                              {t('admin.approved', 'Approved')}
                            </span>
                         )}
                         {approveInvestment.isError && (
@@ -168,13 +189,15 @@ const Admin = () => {
 
             <Card className="bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                <CardHeader>
-                  <CardTitle>Manage Withdrawals</CardTitle>
+                  <CardTitle>
+                     {t('admin.approveWithdrawals', 'Manage Withdrawals')}
+                  </CardTitle>
                </CardHeader>
                <CardContent>
                   {/* Pending withdrawals list */}
                   <div className="mb-4">
                      <div className="text-sm text-muted-foreground mb-2">
-                        Pending Withdrawals
+                        {t('admin.pendingWithdrawals', 'Pending Withdrawals')}
                      </div>
                      <div className="space-y-2">
                         {(pendingWd.data ?? []).map((wd: any) => (
@@ -188,9 +211,10 @@ const Admin = () => {
                                     {wd.user?.lastName ?? ''} · {wd.user?.phone}
                                  </div>
                                  <div className="text-muted-foreground">
-                                    Amount: Birr{' '}
+                                    {t('admin.amountLabel', 'Amount:')} Birr{' '}
                                     {(wd.amountCents / 100).toLocaleString()} ·
-                                    Dest: {wd.destination}
+                                    {t('admin.destination', 'Dest:')}{' '}
+                                    {wd.destination}
                                  </div>
                               </div>
                               <div className="flex gap-2">
@@ -201,7 +225,7 @@ const Admin = () => {
                                        approveWithdrawal.mutate(wd.id)
                                     }
                                  >
-                                    Approve
+                                    {t('admin.approve', 'Approve')}
                                  </Button>
                                  <Button
                                     variant="outline"
@@ -210,7 +234,7 @@ const Admin = () => {
                                        rejectWithdrawal.mutate(wd.id)
                                     }
                                  >
-                                    Reject
+                                    {t('admin.reject', 'Reject')}
                                  </Button>
                                  <Button
                                     size="sm"
@@ -218,23 +242,27 @@ const Admin = () => {
                                        markWithdrawalPaid.mutate(wd.id)
                                     }
                                  >
-                                    Mark Paid
+                                    {t('admin.markPaid', 'Mark Paid')}
                                  </Button>
                               </div>
                            </div>
                         ))}
                         {pendingWd.isLoading && (
-                           <div className="text-sm">Loading…</div>
+                           <div className="text-sm">
+                              {t('admin.loading', 'Loading…')}
+                           </div>
                         )}
                         {pendingWd.isError && (
                            <div className="text-sm text-red-500">
-                              Failed to load
+                              {t('admin.failedLoad', 'Failed to load')}
                            </div>
                         )}
                      </div>
                   </div>
                   <div className="grid gap-3 max-w-md">
-                     <Label htmlFor="wdId">Withdrawal ID</Label>
+                     <Label htmlFor="wdId">
+                        {t('admin.withdrawalId', 'Withdrawal ID')}
+                     </Label>
                      <Input
                         id="wdId"
                         placeholder="withdrawal id"
@@ -253,8 +281,8 @@ const Admin = () => {
                            }
                         >
                            {approveWithdrawal.isPending
-                              ? 'Approving…'
-                              : 'Approve'}
+                              ? t('admin.processing', 'Processing…')
+                              : t('admin.approve', 'Approve')}
                         </Button>
                         <Button
                            variant="outline"
@@ -267,8 +295,8 @@ const Admin = () => {
                            }
                         >
                            {rejectWithdrawal.isPending
-                              ? 'Rejecting…'
-                              : 'Reject'}
+                              ? t('admin.processing', 'Processing…')
+                              : t('admin.reject', 'Reject')}
                         </Button>
                         <Button
                            onClick={() =>
@@ -280,20 +308,22 @@ const Admin = () => {
                            }
                         >
                            {markWithdrawalPaid.isPending
-                              ? 'Marking…'
-                              : 'Mark Paid'}
+                              ? t('admin.processing', 'Processing…')
+                              : t('admin.markPaid', 'Mark Paid')}
                         </Button>
                      </div>
                      {(approveWithdrawal.isSuccess ||
                         rejectWithdrawal.isSuccess ||
                         markWithdrawalPaid.isSuccess) && (
-                        <span className="text-sm text-green-500">Updated</span>
+                        <span className="text-sm text-green-500">
+                           {t('admin.updated', 'Updated')}
+                        </span>
                      )}
                      {(approveWithdrawal.isError ||
                         rejectWithdrawal.isError ||
                         markWithdrawalPaid.isError) && (
                         <span className="text-sm text-red-500">
-                           Action failed
+                           {t('admin.actionFailed', 'Action failed')}
                         </span>
                      )}
                   </div>

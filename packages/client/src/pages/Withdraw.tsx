@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useI18n } from '@/i18n';
 import {
    Wallet,
    Clock,
@@ -16,6 +17,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 
 const Withdraw = () => {
+   const { t } = useI18n();
    const { data: wallet } = useMyWallet();
    const { data: wPage } = useWithdrawals({ page: 1, limit: 20 });
    const request = useRequestWithdrawal();
@@ -29,7 +31,9 @@ const Withdraw = () => {
       e.preventDefault();
       const cents = Math.round(parseFloat(amount || '0') * 100);
       if (!cents || cents < 5000) {
-         toast.error('Minimum withdrawal is 50.00 Birr');
+         toast.error(
+            t('withdraw.minError', 'Minimum withdrawal is 50.00 Birr')
+         );
          return;
       }
       try {
@@ -37,12 +41,13 @@ const Withdraw = () => {
             amountCents: cents,
             destination: `${method}: ${account}${notes ? ` (${notes})` : ''}`,
          });
-         toast.success('Withdrawal requested');
+         toast.success(t('withdraw.success', 'Withdrawal requested'));
          setAmount('');
          setAccount('');
          setNotes('');
       } catch (e: any) {
-         const msg = e?.response?.data?.message || 'Request failed';
+         const msg =
+            e?.response?.data?.message || t('withdraw.error', 'Request failed');
          toast.error(msg);
       }
    };
@@ -73,10 +78,13 @@ const Withdraw = () => {
          <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="mb-8 animate-slide-up">
                <h1 className="text-3xl font-bold text-foreground mb-2">
-                  Withdraw Funds
+                  {t('withdraw.title', 'Withdraw Funds')}
                </h1>
                <p className="text-muted-foreground">
-                  Request a withdrawal from your available balance
+                  {t(
+                     'withdraw.subtitle',
+                     'Request a withdrawal from your available balance'
+                  )}
                </p>
             </div>
 
@@ -86,11 +94,11 @@ const Withdraw = () => {
                   <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <div className="mb-6">
                         <h2 className="text-xl font-semibold text-foreground mb-4">
-                           Available Balance
+                           {t('withdraw.availableBalance', 'Available Balance')}
                         </h2>
                         <div className="bg-gradient-to-r from-green-900 to-green-600 rounded-xl p-6 text-success-foreground">
                            <p className="text-sm text-white opacity-90 mb-1">
-                              Total Available
+                              {t('withdraw.totalAvailable', 'Total Available')}
                            </p>
                            <p className="text-4xl font-bold text-white">
                               {(
@@ -103,7 +111,9 @@ const Withdraw = () => {
 
                      <form className="space-y-5" onSubmit={onSubmit}>
                         <div>
-                           <Label htmlFor="amount">Withdrawal Amount</Label>
+                           <Label htmlFor="amount">
+                              {t('withdraw.amountLabel', 'Withdrawal Amount')}
+                           </Label>
                            <div className="relative mt-1.5">
                               <span className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground">
                                  Birr
@@ -118,13 +128,16 @@ const Withdraw = () => {
                               />
                            </div>
                            <p className="text-sm text-muted-foreground mt-1.5">
-                              Minimum withdrawal: 50.00 Birr
+                              {t(
+                                 'withdraw.minAmountLine',
+                                 'Minimum withdrawal: 50.00 Birr'
+                              )}
                            </p>
                         </div>
 
                         <div>
                            <Label htmlFor="payment-method">
-                              Payment Method
+                              {t('withdraw.paymentMethod', 'Payment Method')}
                            </Label>
                            <select
                               id="payment-method"
@@ -132,21 +145,32 @@ const Withdraw = () => {
                               value={method}
                               onChange={(e) => setMethod(e.target.value)}
                            >
-                              <option>Bank Transfer</option>
-                              <option>PayPal</option>
-                              <option>Crypto Wallet</option>
-                              <option>Wire Transfer</option>
+                              <option value="Bank Transfer">
+                                 {t('withdraw.method.bank', 'Bank Transfer')}
+                              </option>
+                              <option value="PayPal">
+                                 {t('withdraw.method.paypal', 'PayPal')}
+                              </option>
+                              <option value="Crypto Wallet">
+                                 {t('withdraw.method.crypto', 'Crypto Wallet')}
+                              </option>
+                              <option value="Wire Transfer">
+                                 {t('withdraw.method.wire', 'Wire Transfer')}
+                              </option>
                            </select>
                         </div>
 
                         <div>
                            <Label htmlFor="account-details">
-                              Account Details
+                              {t('withdraw.accountDetails', 'Account Details')}
                            </Label>
                            <Input
                               id="account-details"
                               type="text"
-                              placeholder="Enter your account number or wallet address"
+                              placeholder={t(
+                                 'withdraw.accountPlaceholder',
+                                 'Enter your account number or wallet address'
+                              )}
                               className="mt-1.5"
                               value={account}
                               onChange={(e) => setAccount(e.target.value)}
@@ -154,11 +178,16 @@ const Withdraw = () => {
                         </div>
 
                         <div>
-                           <Label htmlFor="notes">Notes (Optional)</Label>
+                           <Label htmlFor="notes">
+                              {t('withdraw.notes', 'Notes (Optional)')}
+                           </Label>
                            <textarea
                               id="notes"
                               rows={3}
-                              placeholder="Any special instructions..."
+                              placeholder={t(
+                                 'withdraw.notesPlaceholder',
+                                 'Any special instructions...'
+                              )}
                               className="w-full mt-1.5 rounded-md border border-input bg-background px-3 py-2 text-sm"
                               value={notes}
                               onChange={(e) => setNotes(e.target.value)}
@@ -176,8 +205,8 @@ const Withdraw = () => {
                         >
                            <Wallet className="w-5 h-5 mr-2" />
                            {request.isPending
-                              ? 'Submitting...'
-                              : 'Request Withdrawal'}
+                              ? t('withdraw.submitting', 'Submitting...')
+                              : t('withdraw.submit', 'Request Withdrawal')}
                         </Button>
                      </form>
                   </Card>
@@ -185,7 +214,7 @@ const Withdraw = () => {
                   {/* Withdrawal History */}
                   <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h2 className="text-xl font-semibold text-foreground mb-6">
-                        Withdrawal History
+                        {t('withdraw.history', 'Withdrawal History')}
                      </h2>
                      <div className="space-y-4">
                         {(wPage?.data ?? []).map(
@@ -233,17 +262,23 @@ const Withdraw = () => {
                <div className="space-y-6">
                   <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
                      <h3 className="text-lg font-semibold text-foreground mb-4">
-                        Withdrawal Info
+                        {t('withdraw.infoTitle', 'Withdrawal Info')}
                      </h3>
                      <div className="space-y-4">
                         <div className="flex gap-3">
                            <Clock className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                            <div>
                               <p className="font-medium text-foreground text-sm">
-                                 Processing Time
+                                 {t(
+                                    'withdraw.processingTime',
+                                    'Processing Time'
+                                 )}
                               </p>
                               <p className="text-sm text-muted-foreground">
-                                 1-3 business days
+                                 {t(
+                                    'withdraw.processingTimeDetail',
+                                    '1-3 business days'
+                                 )}
                               </p>
                            </div>
                         </div>
@@ -251,10 +286,13 @@ const Withdraw = () => {
                            <Wallet className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                            <div>
                               <p className="font-medium text-foreground text-sm">
-                                 Minimum Amount
+                                 {t('withdraw.minimumLabel', 'Minimum Amount')}
                               </p>
                               <p className="text-sm text-muted-foreground">
-                                 50.00 Birr per withdrawal
+                                 {t(
+                                    'withdraw.minimumAmountDetail',
+                                    '50.00 Birr per withdrawal'
+                                 )}
                               </p>
                            </div>
                         </div>
@@ -262,10 +300,13 @@ const Withdraw = () => {
                            <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
                            <div>
                               <p className="font-medium text-foreground text-sm">
-                                 Fees
+                                 {t('withdraw.fees', 'Fees')}
                               </p>
                               <p className="text-sm text-muted-foreground">
-                                 No fees for VIP members
+                                 {t(
+                                    'withdraw.feesDetail',
+                                    'No fees for VIP members'
+                                 )}
                               </p>
                            </div>
                         </div>
@@ -276,21 +317,46 @@ const Withdraw = () => {
                      <div className="flex gap-3">
                         <AlertCircle className="w-5 h-5 text-orange-400 flex-shrink-0 mt-0.5" />
                         <h3 className="text-lg font-semibold text-foreground">
-                           Important
+                           {t('withdraw.important', 'Important')}
                         </h3>
                      </div>
                      <ul className="space-y-2 text-sm text-muted-foreground">
-                        <li>• Ensure account details are correct</li>
-                        <li>• Withdrawals are processed Mon-Fri</li>
-                        <li>• VIP members get priority processing</li>
-                        <li>• Contact support for large withdrawals</li>
+                        <li>
+                           {t(
+                              'withdraw.tip1',
+                              '• Ensure account details are correct'
+                           )}
+                        </li>
+                        <li>
+                           {t(
+                              'withdraw.tip2',
+                              '• Withdrawals are processed Mon-Fri'
+                           )}
+                        </li>
+                        <li>
+                           {t(
+                              'withdraw.tip3',
+                              '• VIP members get priority processing'
+                           )}
+                        </li>
+                        <li>
+                           {t(
+                              'withdraw.tip4',
+                              '• Contact support for large withdrawals'
+                           )}
+                        </li>
                      </ul>
                   </Card>
 
                   <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
-                     <h3 className="text-lg font-semibold">Need Help?</h3>
+                     <h3 className="text-lg font-semibold">
+                        {t('withdraw.helpTitle', 'Need Help?')}
+                     </h3>
                      <p className="text-sm opacity-90 mb-4">
-                        Our support team is available 24/7 to assist you
+                        {t(
+                           'withdraw.helpText',
+                           'Our support team is available 24/7 to assist you'
+                        )}
                      </p>
                      <Button
                         variant="outline"
@@ -298,7 +364,7 @@ const Withdraw = () => {
                         className="border-zinc-700 bg-white/5 text-white px-8 h-12 text-base hover:bg-white/10 hover:text-white"
                      >
                         <HelpCircle className="w-4 h-4 mr-2" />
-                        Contact Support
+                        {t('withdraw.contactSupport', 'Contact Support')}
                      </Button>
                   </Card>
                </div>

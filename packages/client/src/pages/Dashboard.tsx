@@ -17,12 +17,14 @@ import { useTransactions } from '@/hooks/useTransactions';
 import { useInvestments } from '@/hooks/useInvestments';
 import { useMe } from '@/hooks/useAuth';
 import { NavLink } from 'react-router';
+import { useI18n } from '@/i18n';
 
 const Dashboard = () => {
    const { data: me } = useMe();
    const { data: wallet } = useMyWallet();
    const { data: txPage } = useTransactions({ page: 1, limit: 10 });
    const { data: invPage } = useInvestments({ page: 1, limit: 10 });
+   const { t } = useI18n();
    const recentTransactions = (txPage?.data ?? []).map((t: any) => ({
       type: t.type ?? 'Transaction',
       amount: `${t.amountCents >= 0 ? '+' : '-'}Birr ${Math.abs(t.amountCents / 100).toLocaleString()}`,
@@ -59,43 +61,46 @@ const Dashboard = () => {
             {/* Welcome Section */}
             <div className="mb-8 animate-slide-up">
                <h1 className="text-3xl font-bold text-foreground mb-2">
-                  {`Welcome Back${me?.firstName ? `, ${me.firstName}!` : '!'}`}
+                  {`${t('dashboard.welcome', 'Welcome Back')}${me?.firstName ? `, ${me.firstName}!` : '!'}`}
                </h1>
                <p className="text-muted-foreground">
-                  Here's your investment overview
+                  {t('dashboard.overview', "Here's your investment overview")}
                </p>
             </div>
 
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate-fade-in">
                <StatsCard
-                  title="Total Balance"
+                  title={t('dashboard.totalBalance', 'Total Balance')}
                   value={`Birr ${((wallet?.balanceCents ?? 0) / 100).toLocaleString()}`}
                   icon={Wallet}
-                  trend="+12.5% this month"
+                  trend={t('dashboard.trendThisMonth', '+12.5% this month')}
                   trendUp={true}
                   variant="default"
                />
                <StatsCard
-                  title="Active Investments"
+                  title={t('dashboard.activeInvestments', 'Active Investments')}
                   value={`${invPage?.total ?? 0}`}
                   icon={TrendingUp}
-                  trend="Investments"
+                  trend={t('dashboard.trendInvestments', 'Investments')}
                   trendUp={true}
                   variant="success"
                />
                <StatsCard
-                  title="Recent Transactions"
+                  title={t(
+                     'dashboard.recentTransactions',
+                     'Recent Transactions'
+                  )}
                   value={`${txPage?.total ?? 0}`}
                   icon={Package}
-                  trend="Last 10 fetched"
+                  trend={t('dashboard.trendLast10', 'Last 10 fetched')}
                   variant="default"
                />
                <StatsCard
-                  title="Referrals"
+                  title={t('dashboard.referrals', 'Referrals')}
                   value={me?.referralCount ? String(me.referralCount) : '0'}
                   icon={Users}
-                  trend="Total"
+                  trend={t('dashboard.trendTotal', 'Total')}
                   trendUp={true}
                   variant="accent"
                />
@@ -107,10 +112,10 @@ const Dashboard = () => {
                   <Card className="p-6 shadow-custom-md bg-zinc-900/20 border border-zinc-800/40 backdrop-blur-sm rounded-2xl">
                      <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-semibold text-foreground">
-                           Active Packages
+                           {t('dashboard.activePackages', 'Active Packages')}
                         </h2>
                         <Button variant="outline" size="sm">
-                           View All
+                           {t('dashboard.viewAll', 'View All')}
                         </Button>
                      </div>
 
@@ -124,10 +129,14 @@ const Dashboard = () => {
                               <div className="flex items-start justify-between mb-4">
                                  <div>
                                     <h3 className="text-lg font-semibold text-foreground mb-1">
-                                       Active Investment
+                                       {t(
+                                          'dashboard.activeInvestment',
+                                          'Active Investment'
+                                       )}
                                     </h3>
                                     <p className="text-sm text-muted-foreground">
-                                       Investment: Birr{' '}
+                                       {t('dashboard.investment', 'Investment')}
+                                       : Birr{' '}
                                        {(
                                           inv.amountCents / 100
                                        ).toLocaleString()}
@@ -138,7 +147,10 @@ const Dashboard = () => {
                                        Birr {inv.totalReturnCents}
                                     </p>
                                     <p className="text-sm text-muted-foreground">
-                                       Total Return (plan)
+                                       {t(
+                                          'dashboard.totalReturnPlan',
+                                          'Total Return (plan)'
+                                       )}
                                     </p>
                                  </div>
                               </div>
@@ -148,7 +160,10 @@ const Dashboard = () => {
                                     <div className="flex items-center gap-2 mb-1">
                                        <Coins className="w-4 h-4 text-green-400" />
                                        <p className="text-xs text-muted-foreground">
-                                          Daily Profit (bps)
+                                          {t(
+                                             'dashboard.dailyProfitBps',
+                                             'Daily Profit (bps)'
+                                          )}
                                        </p>
                                     </div>
                                     <p className="text-lg font-semibold text-foreground">
@@ -159,7 +174,7 @@ const Dashboard = () => {
                                     <div className="flex items-center gap-2 mb-1">
                                        <Clock className="w-4 h-4 text-primary" />
                                        <p className="text-xs text-muted-foreground">
-                                          Status
+                                          {t('dashboard.status', 'Status')}
                                        </p>
                                     </div>
                                     <p className="text-lg font-semibold text-foreground">
@@ -171,7 +186,7 @@ const Dashboard = () => {
                               <div>
                                  <div className="flex justify-between text-sm mb-2">
                                     <span className="text-muted-foreground">
-                                       Progress
+                                       {t('dashboard.progress', 'Progress')}
                                     </span>
                                     <span className="text-foreground font-medium">
                                        50%
@@ -192,10 +207,13 @@ const Dashboard = () => {
                   <Card className="p-6 shadow-custom-md bg-zinc-900/20 border border-zinc-800/40 backdrop-blur-sm rounded-2xl">
                      <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-semibold text-foreground">
-                           Recent Transactions
+                           {t(
+                              'dashboard.recentTransactions',
+                              'Recent Transactions'
+                           )}
                         </h2>
                         <Button variant="outline" size="sm">
-                           View All
+                           {t('dashboard.viewAll', 'View All')}
                         </Button>
                      </div>
 
@@ -270,7 +288,7 @@ const Dashboard = () => {
                <div className="space-y-6">
                   <Card className="p-6 shadow-custom-md bg-zinc-900/20 border border-zinc-800/40 backdrop-blur-sm rounded-2xl">
                      <h2 className="text-xl font-semibold text-foreground mb-6">
-                        Quick Actions
+                        {t('dashboard.quickActions', 'Quick Actions')}
                      </h2>
                      <div className="flex flex-col gap-y-3 ">
                         <NavLink to="/packages">
@@ -278,7 +296,12 @@ const Dashboard = () => {
                               className="w-full bg-primary text-white justify-between"
                               size="lg"
                            >
-                              <span>New Investment</span>
+                              <span>
+                                 {t(
+                                    'dashboard.newInvestment',
+                                    'New Investment'
+                                 )}
+                              </span>
                               <ArrowUpRight className="w-5 h-5" />
                            </Button>
                         </NavLink>
@@ -288,7 +311,12 @@ const Dashboard = () => {
                               className="w-full justify-between"
                               size="lg"
                            >
-                              <span>Withdraw Funds</span>
+                              <span>
+                                 {t(
+                                    'dashboard.withdrawFunds',
+                                    'Withdraw Funds'
+                                 )}
+                              </span>
                               <Wallet className="w-5 h-5" />
                            </Button>
                         </NavLink>
@@ -298,7 +326,12 @@ const Dashboard = () => {
                               className="w-full justify-between"
                               size="lg"
                            >
-                              <span>Invite Friends</span>
+                              <span>
+                                 {t(
+                                    'dashboard.inviteFriends',
+                                    'Invite Friends'
+                                 )}
+                              </span>
                               <Users className="w-5 h-5" />
                            </Button>
                         </NavLink>
@@ -307,14 +340,16 @@ const Dashboard = () => {
 
                   <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800/40 backdrop-blur-sm rounded-2xl">
                      <h3 className="text-lg text-white font-semibold mb-2">
-                        Invite & Earn
+                        {t('dashboard.inviteEarn', 'Invite & Earn')}
                      </h3>
                      <p className="text-sm text-white opacity-90 mb-4">
-                        Share your referral link and earn up to 10% commission
-                        on every investment!
+                        {t(
+                           'dashboard.inviteEarnBody',
+                           'Share your referral link and earn up to 10% commission on every investment!'
+                        )}
                      </p>
                      <Button variant="secondary" className="w-full">
-                        Share Now
+                        {t('dashboard.shareNow', 'Share Now')}
                      </Button>
                   </Card>
                </div>

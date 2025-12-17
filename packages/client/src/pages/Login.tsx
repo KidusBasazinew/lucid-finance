@@ -7,6 +7,7 @@ import { TrendingUp } from 'lucide-react';
 import { useState } from 'react';
 import { useLogin } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { useI18n } from '@/i18n';
 
 const Login = () => {
    const [phone, setPhone] = useState('');
@@ -15,6 +16,7 @@ const Login = () => {
    const navigate = useNavigate();
    const location = useLocation() as any;
    const from = location.state?.from?.pathname || '/dashboard';
+   const { t } = useI18n();
 
    const onSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
@@ -57,10 +59,11 @@ const Login = () => {
                </div>
 
                <h1 className="text-3xl font-bold text-foreground mb-2">
-                  Welcome Back
+                  {t('auth.welcome', 'Welcome Back')}
                </h1>
                <p className="text-muted-foreground">
-                  Log in to access your investment dashboard
+                  {t('auth.loginCta', 'Log In')} to access your investment
+                  dashboard
                </p>
             </div>
 
@@ -91,7 +94,7 @@ const Login = () => {
                         to="#"
                         className="text-sm text-primary hover:underline"
                      >
-                        Forgot password?
+                        {t('auth.forgot', 'Forgot password?')}
                      </Link>
                   </div>
                   <Input
@@ -111,19 +114,21 @@ const Login = () => {
                   type="submit"
                   disabled={login.isPending}
                >
-                  {login.isPending ? 'Logging in...' : 'Log In'}
+                  {login.isPending
+                     ? t('auth.loginCta', 'Log In') + '...'
+                     : t('auth.loginCta', 'Log In')}
                </Button>
             </form>
 
             {/* Footer */}
             <div className="mt-6 text-center">
                <p className="text-sm text-muted-foreground">
-                  Don’t have an account?{' '}
+                  {t('auth.noAccount', 'Don’t have an account?')}{' '}
                   <Link
                      to="/register"
                      className="text-primary font-medium hover:underline"
                   >
-                     Sign up now
+                     {t('auth.signupNow', 'Sign up now')}
                   </Link>
                </p>
             </div>

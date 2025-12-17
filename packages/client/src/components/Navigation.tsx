@@ -14,6 +14,7 @@ import { useState } from 'react';
 import { useLogout, useMe } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router';
 import { SidebarLink } from './SideBarLink';
+import { useI18n } from '@/i18n';
 
 const Navigation = () => {
    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -21,9 +22,14 @@ const Navigation = () => {
    const logout = useLogout();
    const { data: me } = useMe();
    const navigate = useNavigate();
+   const { t, language, setLanguage } = useI18n();
    const handleLogout = async () => {
       await logout.mutateAsync();
       navigate('/login');
+   };
+
+   const toggleLanguage = () => {
+      setLanguage(language === 'en' ? 'om' : 'en');
    };
 
    return (
@@ -65,25 +71,29 @@ const Navigation = () => {
                         {[
                            {
                               to: '/dashboard',
-                              label: 'Dashboard',
+                              label: t('nav.dashboard', 'Dashboard'),
                               icon: LayoutDashboard,
                            },
                            {
                               to: '/packages',
-                              label: 'Packages',
+                              label: t('nav.packages', 'Packages'),
                               icon: Package,
                            },
-                           { to: '/withdraw', label: 'Withdraw', icon: Wallet },
+                           {
+                              to: '/withdraw',
+                              label: t('nav.withdraw', 'Withdraw'),
+                              icon: Wallet,
+                           },
                            {
                               to: '/referrals',
-                              label: 'Referrals',
+                              label: t('nav.referrals', 'Referrals'),
                               icon: Users,
                            },
                            ...(me?.role === 'ADMIN'
                               ? [
                                    {
                                       to: '/admin',
-                                      label: 'Admin',
+                                      label: t('nav.admin', 'Admin'),
                                       icon: LayoutDashboard,
                                    },
                                 ]
@@ -108,18 +118,29 @@ const Navigation = () => {
                         <Button
                            variant="ghost"
                            size="sm"
+                           onClick={toggleLanguage}
+                           className="flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                        >
+                           {language === 'en' ? 'OM' : 'EN'}
+                        </Button>
+
+                        <Button
+                           variant="ghost"
+                           size="sm"
                            onClick={handleLogout}
                            className="flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50"
                         >
                            <LogOut className="w-4 h-4" />
-                           Logout
+                           {t('nav.logout', 'Logout')}
                         </Button>
                      </div>
                   </>
                ) : (
                   <div className="flex items-center justify-center">
                      <NavLink to="/login">
-                        <Button variant="ghost">Login</Button>
+                        <Button variant="ghost">
+                           {t('nav.login', 'Login')}
+                        </Button>
                      </NavLink>
                      <NavLink to="/register">
                         <Button
@@ -129,7 +150,7 @@ const Navigation = () => {
                            className="flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50"
                         >
                            <LogOut className="w-4 h-4" />
-                           Get Start
+                           {t('nav.getStarted', 'Get Started')}
                         </Button>
                      </NavLink>
                   </div>
@@ -160,25 +181,29 @@ const Navigation = () => {
                         {[
                            {
                               to: '/dashboard',
-                              label: 'Dashboard',
+                              label: t('nav.dashboard', 'Dashboard'),
                               icon: LayoutDashboard,
                            },
                            {
                               to: '/packages',
-                              label: 'Packages',
+                              label: t('nav.packages', 'Packages'),
                               icon: Package,
                            },
-                           { to: '/withdraw', label: 'Withdraw', icon: Wallet },
+                           {
+                              to: '/withdraw',
+                              label: t('nav.withdraw', 'Withdraw'),
+                              icon: Wallet,
+                           },
                            {
                               to: '/referrals',
-                              label: 'Referrals',
+                              label: t('nav.referrals', 'Referrals'),
                               icon: Users,
                            },
                            ...(me?.role === 'ADMIN'
                               ? [
                                    {
                                       to: '/admin',
-                                      label: 'Admin',
+                                      label: t('nav.admin', 'Admin'),
                                       icon: LayoutDashboard,
                                    },
                                 ]
@@ -194,7 +219,7 @@ const Navigation = () => {
                               className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800/40"
                            >
                               <User className="w-4 h-4" />
-                              Profile
+                              {t('nav.profile', 'Profile')}
                            </NavLink>
 
                            <button
@@ -205,8 +230,19 @@ const Navigation = () => {
                               className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-300 hover:text-white hover:bg-zinc-800/40 w-full text-left"
                            >
                               <LogOut className="w-4 h-4" />
-                              Logout
+                              {t('nav.logout', 'Logout')}
                            </button>
+                           <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                 toggleLanguage();
+                                 setMobileMenuOpen(false);
+                              }}
+                              className="w-full justify-start text-zinc-400 hover:text-white hover:bg-zinc-800/40"
+                           >
+                              {language === 'en' ? 'Oromo' : 'English'}
+                           </Button>
                         </div>
                      </>
                   ) : (
@@ -216,7 +252,7 @@ const Navigation = () => {
                            onClick={() => setMobileMenuOpen(false)}
                         >
                            <Button variant="ghost" className="w-full">
-                              Login
+                              {t('nav.login', 'Login')}
                            </Button>
                         </NavLink>
                         <NavLink
@@ -224,9 +260,20 @@ const Navigation = () => {
                            onClick={() => setMobileMenuOpen(false)}
                         >
                            <Button variant="ghost" className="w-full">
-                              Get Started
+                              {t('nav.getStarted', 'Get Started')}
                            </Button>
                         </NavLink>
+                        <Button
+                           variant="ghost"
+                           size="sm"
+                           onClick={() => {
+                              toggleLanguage();
+                              setMobileMenuOpen(false);
+                           }}
+                           className="w-full justify-start text-zinc-400 hover:text-white hover:bg-zinc-800/40"
+                        >
+                           {language === 'en' ? 'Oromo' : 'English'}
+                        </Button>
                      </div>
                   )}
                </div>
