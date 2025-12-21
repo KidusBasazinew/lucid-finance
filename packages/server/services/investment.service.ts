@@ -20,7 +20,7 @@ export const investmentService = {
       const created = await investmentRepository.create({
          user: { connect: { id: userId } },
          package: { connect: { id: pack.id } },
-         amountCents: pack.amountCents,
+         amountCents: 0,
          dailyProfitBps: pack.dailyProfitBps,
          totalReturnCents: pack.totalReturnBps,
          endDate: null,

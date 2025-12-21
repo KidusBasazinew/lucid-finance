@@ -30,9 +30,9 @@ const Withdraw = () => {
    const onSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       const cents = Math.round(parseFloat(amount || '0') * 100);
-      if (!cents || cents < 5000) {
+      if (!cents || cents < 30000) {
          toast.error(
-            t('withdraw.minError', 'Minimum withdrawal is 50.00 Birr')
+            t('withdraw.minError', 'Minimum withdrawal is 300.00 Birr')
          );
          return;
       }
@@ -130,7 +130,7 @@ const Withdraw = () => {
                            <p className="text-sm text-muted-foreground mt-1.5">
                               {t(
                                  'withdraw.minAmountLine',
-                                 'Minimum withdrawal: 50.00 Birr'
+                                 'Minimum withdrawal: 300.00 Birr'
                               )}
                            </p>
                         </div>
@@ -146,16 +146,16 @@ const Withdraw = () => {
                               onChange={(e) => setMethod(e.target.value)}
                            >
                               <option value="Bank Transfer">
-                                 {t('withdraw.method.bank', 'Bank Transfer')}
+                                 {t('withdraw.method.cbe', 'CBE Bank')}
                               </option>
                               <option value="PayPal">
-                                 {t('withdraw.method.paypal', 'PayPal')}
+                                 {t(
+                                    'withdraw.method.abisiniaBank',
+                                    'Abisinia Bank'
+                                 )}
                               </option>
                               <option value="Crypto Wallet">
-                                 {t('withdraw.method.crypto', 'Crypto Wallet')}
-                              </option>
-                              <option value="Wire Transfer">
-                                 {t('withdraw.method.wire', 'Wire Transfer')}
+                                 {t('withdraw.method.teleBirr', 'Tele Birr')}
                               </option>
                            </select>
                         </div>
@@ -291,7 +291,7 @@ const Withdraw = () => {
                               <p className="text-sm text-muted-foreground">
                                  {t(
                                     'withdraw.minimumAmountDetail',
-                                    '50.00 Birr per withdrawal'
+                                    '300.00 Birr per withdrawal'
                                  )}
                               </p>
                            </div>
@@ -339,33 +339,7 @@ const Withdraw = () => {
                               '• VIP members get priority processing'
                            )}
                         </li>
-                        <li>
-                           {t(
-                              'withdraw.tip4',
-                              '• Contact support for large withdrawals'
-                           )}
-                        </li>
                      </ul>
-                  </Card>
-
-                  <Card className="p-6 shadow-custom-md bg-zinc-900/30 border border-zinc-800 backdrop-blur-sm">
-                     <h3 className="text-lg font-semibold">
-                        {t('withdraw.helpTitle', 'Need Help?')}
-                     </h3>
-                     <p className="text-sm opacity-90 mb-4">
-                        {t(
-                           'withdraw.helpText',
-                           'Our support team is available 24/7 to assist you'
-                        )}
-                     </p>
-                     <Button
-                        variant="outline"
-                        size="lg"
-                        className="border-zinc-700 bg-white/5 text-white px-8 h-12 text-base hover:bg-white/10 hover:text-white"
-                     >
-                        <HelpCircle className="w-4 h-4 mr-2" />
-                        {t('withdraw.contactSupport', 'Contact Support')}
-                     </Button>
                   </Card>
                </div>
             </div>

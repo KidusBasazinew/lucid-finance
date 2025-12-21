@@ -167,16 +167,22 @@ const Packages = () => {
                   </p>
 
                   {/* TeleBirr QR Code */}
-                  <img
+                  {/* <img
                      src="/telebirr_qr_code.png"
                      alt="TeleBirr QR"
                      className="w-48 mx-auto border rounded-lg shadow"
-                  />
-
+                  /> */}
+                  <p>0940414255</p>
                   <p className="text-sm text-muted-foreground">
                      {t(
                         'packages.dialogAfterPay',
                         'After paying, click "Confirm Payment"'
+                     )}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                     {t(
+                        'packages.dialogProofAfterPay',
+                        'Make sure to submit your screenshot of the payment in the Telegram to this user: @LucidFinanceSupport'
                      )}
                   </p>
                </div>

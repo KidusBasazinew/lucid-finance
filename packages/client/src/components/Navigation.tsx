@@ -29,7 +29,7 @@ const Navigation = () => {
    };
 
    const toggleLanguage = () => {
-      setLanguage(language === 'en' ? 'om' : 'en');
+      setLanguage(language === 'en' ? 'om' : language === 'om' ? 'ah' : 'en');
    };
 
    return (
@@ -121,7 +121,11 @@ const Navigation = () => {
                            onClick={toggleLanguage}
                            className="flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50"
                         >
-                           {language === 'en' ? 'OM' : 'EN'}
+                           {language === 'en'
+                              ? 'EN'
+                              : language === 'om'
+                                ? 'OM'
+                                : 'AH'}
                         </Button>
 
                         <Button
