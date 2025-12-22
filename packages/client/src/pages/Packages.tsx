@@ -158,31 +158,73 @@ const Packages = () => {
                   </DialogTitle>
                </DialogHeader>
 
-               <div className="space-y-4 text-center">
-                  <p className="text-muted-foreground">
+               <div className="space-y-5 text-center">
+                  <p className="text-muted-foreground text-base">
                      {t(
-                        'packages.dialogPay',
-                        'Pay using TeleBirr by scanning the QR code below'
+                        'packages.dialogIntro',
+                        'Follow the steps below to complete your payment using TeleBirr'
                      )}
                   </p>
 
-                  {/* TeleBirr QR Code */}
-                  {/* <img
-                     src="/telebirr_qr_code.png"
-                     alt="TeleBirr QR"
-                     className="w-48 mx-auto border rounded-lg shadow"
-                  /> */}
-                  <p>0940414255</p>
-                  <p className="text-sm text-muted-foreground">
+                  <div className="max-w-md mx-auto text-left space-y-3">
+                     <div className="flex gap-3">
+                        <span className="font-bold">1.</span>
+                        <p>
+                           {t(
+                              'packages.step1',
+                              'Open TeleBirr and send the payment to the following number:'
+                           )}
+                           <br />
+                           <span className="font-semibold text-lg">
+                              {t('packages.telebirrNumber', '0940414255')}
+                           </span>
+                        </p>
+                     </div>
+
+                     <div className="flex gap-3">
+                        <span className="font-bold">2.</span>
+                        <p>
+                           {t(
+                              'packages.step2',
+                              'Take a screenshot of the payment confirmation.'
+                           )}
+                        </p>
+                     </div>
+
+                     <div className="flex gap-3">
+                        <span className="font-bold">3.</span>
+                        <p>
+                           {t(
+                              'packages.step3',
+                              'Open Telegram and send the screenshot to the following user:'
+                           )}
+                           <br />
+                           <a
+                              href="https://t.me/official_lucidfinance"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="font-semibold text-primary underline underline-offset-4 hover:opacity-80"
+                           >
+                              {t('packages.telegramUser', '@lucidfinance')}
+                           </a>
+                        </p>
+                     </div>
+
+                     <div className="flex gap-3">
+                        <span className="font-bold">4.</span>
+                        <p>
+                           {t(
+                              'packages.step4',
+                              'Return to this page and click “I have paid — Confirm”.'
+                           )}
+                        </p>
+                     </div>
+                  </div>
+
+                  <p className="text-xs text-muted-foreground">
                      {t(
-                        'packages.dialogAfterPay',
-                        'After paying, click "Confirm Payment"'
-                     )}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                     {t(
-                        'packages.dialogProofAfterPay',
-                        'Make sure to submit your screenshot of the payment in the Telegram to this user: @LucidFinanceSupport'
+                        'packages.paymentWarning',
+                        'Make sure the screenshot clearly shows the amount, date, and transaction ID.'
                      )}
                   </p>
                </div>

@@ -15,6 +15,12 @@ import { useLogout, useMe } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router';
 import { SidebarLink } from './SideBarLink';
 import { useI18n } from '@/i18n';
+import {
+   DropdownMenu,
+   DropdownMenuTrigger,
+   DropdownMenuContent,
+   DropdownMenuItem,
+} from '@/components/ui/dropdown-menu';
 
 const Navigation = () => {
    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -28,9 +34,11 @@ const Navigation = () => {
       navigate('/login');
    };
 
-   const toggleLanguage = () => {
-      setLanguage(language === 'en' ? 'om' : language === 'om' ? 'ah' : 'en');
-   };
+   const languages = [
+      { code: 'en', label: 'English' },
+      { code: 'om', label: 'Oromo' },
+      { code: 'ah', label: 'Amharic' },
+   ] as const;
 
    return (
       <nav className="sticky top-0 z-50 bg-zinc-900/30 backdrop-blur-lg border-b border-zinc-800">
@@ -115,18 +123,30 @@ const Navigation = () => {
                            </Button>
                         </NavLink>
 
-                        <Button
-                           variant="ghost"
-                           size="sm"
-                           onClick={toggleLanguage}
-                           className="flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50"
-                        >
-                           {language === 'en'
-                              ? 'EN'
-                              : language === 'om'
-                                ? 'OM'
-                                : 'AH'}
-                        </Button>
+                        <DropdownMenu>
+                           <DropdownMenuTrigger asChild>
+                              <Button
+                                 variant="ghost"
+                                 size="sm"
+                                 className="flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                              >
+                                 {language?.toUpperCase?.() ?? 'EN'}
+                              </Button>
+                           </DropdownMenuTrigger>
+                           <DropdownMenuContent
+                              align="end"
+                              className="min-w-[10rem]"
+                           >
+                              {languages.map((l) => (
+                                 <DropdownMenuItem
+                                    key={l.code}
+                                    onClick={() => setLanguage(l.code)}
+                                 >
+                                    {l.label}
+                                 </DropdownMenuItem>
+                              ))}
+                           </DropdownMenuContent>
+                        </DropdownMenu>
 
                         <Button
                            variant="ghost"
@@ -236,17 +256,34 @@ const Navigation = () => {
                               <LogOut className="w-4 h-4" />
                               {t('nav.logout', 'Logout')}
                            </button>
-                           <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => {
-                                 toggleLanguage();
-                                 setMobileMenuOpen(false);
-                              }}
-                              className="w-full justify-start text-zinc-400 hover:text-white hover:bg-zinc-800/40"
-                           >
-                              {language === 'en' ? 'Oromo' : 'English'}
-                           </Button>
+                           <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                 <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="w-full justify-start text-zinc-400 hover:text-white hover:bg-zinc-800/40"
+                                 >
+                                    {languages.find((l) => l.code === language)
+                                       ?.label ?? 'English'}
+                                 </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent
+                                 align="start"
+                                 className="min-w-[10rem]"
+                              >
+                                 {languages.map((l) => (
+                                    <DropdownMenuItem
+                                       key={l.code}
+                                       onClick={() => {
+                                          setLanguage(l.code);
+                                          setMobileMenuOpen(false);
+                                       }}
+                                    >
+                                       {l.label}
+                                    </DropdownMenuItem>
+                                 ))}
+                              </DropdownMenuContent>
+                           </DropdownMenu>
                         </div>
                      </>
                   ) : (
@@ -267,17 +304,34 @@ const Navigation = () => {
                               {t('nav.getStarted', 'Get Started')}
                            </Button>
                         </NavLink>
-                        <Button
-                           variant="ghost"
-                           size="sm"
-                           onClick={() => {
-                              toggleLanguage();
-                              setMobileMenuOpen(false);
-                           }}
-                           className="w-full justify-start text-zinc-400 hover:text-white hover:bg-zinc-800/40"
-                        >
-                           {language === 'en' ? 'Oromo' : 'English'}
-                        </Button>
+                        <DropdownMenu>
+                           <DropdownMenuTrigger asChild>
+                              <Button
+                                 variant="ghost"
+                                 size="sm"
+                                 className="w-full justify-start text-zinc-400 hover:text-white hover:bg-zinc-800/40"
+                              >
+                                 {languages.find((l) => l.code === language)
+                                    ?.label ?? 'English'}
+                              </Button>
+                           </DropdownMenuTrigger>
+                           <DropdownMenuContent
+                              align="start"
+                              className="min-w-[10rem]"
+                           >
+                              {languages.map((l) => (
+                                 <DropdownMenuItem
+                                    key={l.code}
+                                    onClick={() => {
+                                       setLanguage(l.code);
+                                       setMobileMenuOpen(false);
+                                    }}
+                                 >
+                                    {l.label}
+                                 </DropdownMenuItem>
+                              ))}
+                           </DropdownMenuContent>
+                        </DropdownMenu>
                      </div>
                   )}
                </div>

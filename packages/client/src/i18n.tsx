@@ -224,12 +224,22 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       'packages.toastSuccess': 'Investment created',
       'packages.toastFail': 'Failed to invest',
       'packages.dialogTitle': 'Complete Payment',
-      'packages.dialogPay': 'Pay using TeleBirr by scanning the QR code below',
+      'packages.dialogPay': 'Pay using TeleBirr by the phone number below',
       'packages.dialogAfterPay': 'After paying, click “Confirm Payment”',
       'packages.dialogProofAfterPay':
          'Make sure to submit your screenshot of the payment in the Telegram to this user: @LucidFinanceSupport',
       'packages.dialogCancel': 'Cancel',
       'packages.dialogConfirm': 'I have paid — Confirm',
+      dialogIntro:
+         'Follow the steps below to complete your payment using TeleBirr',
+      step1: 'Open TeleBirr and send the payment to the following number:',
+      telebirrNumber: '0940414255',
+      step2: 'Take a screenshot of the payment confirmation.',
+      step3: 'Open Telegram and send the screenshot to the following user:',
+      telegramUser: '@lucidfinance',
+      step4: 'Return to this page and click “I have paid — Confirm”.',
+      paymentWarning:
+         'Make sure the screenshot clearly shows the amount, date, and transaction ID.',
    },
    om: {
       'nav.dashboard': 'Daashboordii',
@@ -442,12 +452,23 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       'packages.toastSuccess': 'Inveestii uumame',
       'packages.toastFail': 'Inveest godhuu hin dandeenye',
       'packages.dialogTitle': 'Kaffaltii Xumuri',
-      'packages.dialogPay': 'TeleBirr fayyadami; QR armaan gadii siki',
+      'packages.dialogPay':
+         'TeleBirr fayyadamuun lakkoofsa bilbilaa armaan gadii kanaan kaffalaa',
       'packages.dialogAfterPay': 'Kaffalte booda "Confirm Payment" tuqi',
       'packages.dialogProofAfterPay':
          'Suuraa iskiriinii kaffaltii Telegiraamii keessa jiru fayyadamaa kanaaf dhiyeessuu keessan mirkaneessaa: @LucidFinanceSupport',
       'packages.dialogCancel': 'Haqi',
       'packages.dialogConfirm': 'Kaffaleera — Mirkaneessi',
+      dialogIntro:
+         'Follow the steps below to complete your payment using TeleBirr',
+      step1: 'TeleBirr banuun kaffaltii lakkoofsa armaan gadii kanaan ergaa:',
+      telebirrNumber: '0940414255',
+      step2: 'Mirkaneessa kaffaltii sanaa suuraa iskiriinii fudhadhaa.',
+      step3: 'Telegram banuun suuraa iskiriinii fayyadamaa armaan gadiitti ergaa:',
+      telegramUser: '@lucidfinance',
+      step4: 'Gara fuula kanaatti deebi’aatii “I have paid — Confirm” cuqaasaa.',
+      paymentWarning:
+         'Fakkiin iskiriinii hanga, guyyaa fi ID daldalaa ifatti akka agarsiisu mirkaneessi.',
    },
    ah: {
       'nav.dashboard': 'ዳሽቦርድ',
@@ -661,12 +682,21 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       'packages.toastSuccess': 'ኢንቨስትመንት ተፈጥሯል።',
       'packages.toastFail': 'ኢንቨስትመንቱ አልተሳካም',
       'packages.dialogTitle': 'ክፍያ አጠናቅ',
-      'packages.dialogPay': 'ከታች ያለውን QR ኮድ በመቃኘት ቴሌብርን በመጠቀም ይክፈሉ።',
+      'packages.dialogPay': 'ከዚህ በታች ባለው ስልክ ቁጥር ቴሌቢርን በመጠቀም ይክፈሉ።',
       'packages.dialogAfterPay': 'ከከፈሉ በኋላ “ክፍያ አረጋግጥ” ን ይጫኑ።',
       'packages.dialogProofAfterPay':
          'የክፍያውን ቅጽበታዊ ገጽ እይታ በቴሌግራም ለዚህ ተጠቃሚ ማስረከብዎን ያረጋግጡ፡ @LucidFinanceSupport',
       'packages.dialogCancel': 'መልስ',
       'packages.dialogConfirm': 'ከፍያለው  — አረጋግጥ',
+      dialogIntro: 'ቴሌቢርን ከፍተው ክፍያውን በሚከተለው ቁጥር ይላኩ።',
+      step1: 'Open TeleBirr and send the payment to the following number:',
+      telebirrNumber: '0940414255',
+      step2: 'የክፍያ ማረጋገጫውን ቅጽበታዊ ገጽ እይታ ያንሱ።',
+      step3: 'ቴሌግራም ይክፈቱ እና ስክሪፕቱን ለሚከተለው ተጠቃሚ ይላኩ።',
+      telegramUser: '@lucidfinance',
+      step4: 'ወደዚህ ገጽ ይመለሱ እና "እኔ ከፍያለሁ - አረጋግጥ" ን ጠቅ ያድርጉ።',
+      paymentWarning:
+         'ቅጽበታዊ ገጽ እይታው መጠኑን፣ ቀን እና የግብይት መታወቂያውን በግልፅ እንደሚያሳይ ያረጋግጡ።',
    },
 };
 
@@ -685,7 +715,7 @@ export const I18nProvider = ({ children }: { children: React.ReactNode }) => {
 
    useEffect(() => {
       const stored = localStorage.getItem(STORAGE_KEY) as AppLanguage | null;
-      if (stored === 'en' || stored === 'om') {
+      if (stored === 'en' || stored === 'om' || stored === 'ah') {
          setLanguage(stored);
       }
    }, []);
