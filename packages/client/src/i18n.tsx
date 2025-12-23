@@ -212,7 +212,7 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       'home.cta2.body':
          'Start with small packages or unlock everything with Pro and Ultra. Your investment journey begins now.',
       'home.cta2.button': 'View Pricing',
-      'home.footer': '© 2024 VIP Invest. All rights reserved.',
+      'home.footer': '© 2025 VIP Invest. All rights reserved.',
       'packages.title': 'VIP Investment',
       'packages.titleHighlight': 'Packages',
       'packages.subtitle':
@@ -241,7 +241,7 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       paymentWarning:
          'Make sure the screenshot clearly shows the amount, date, and transaction ID.',
       'home.footer.cta': 'Join the Telegram Channel',
-      'home.footer.copyright': '© 2024 Lucid Finance. All rights reserved.',
+      'home.footer.copyright': '© 2025 Lucid Finance. All rights reserved.',
       'home.footer.subtitle':
          'Hop into our official channel to catch announcements, release notes, and fresh promos as soon as they land.',
       'home.footer.title':
@@ -447,7 +447,7 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       'home.cta2.body':
          'Pakeejii xiqqaa irraa jalqabi yookaan Pro fi Ultra banu. Imalli kee amma jalqaba.',
       'home.cta2.button': 'Gatiin ilaali',
-      'home.footer': '© 2024 VIP Invest. Mirga hunda ni eeggata.',
+      'home.footer': '© 2025 VIP Invest. Mirga hunda ni eeggata.',
       'packages.title': 'Inveestii VIP',
       'packages.titleHighlight': 'Pakeejota',
       'packages.subtitle':
@@ -478,7 +478,7 @@ const translations: Record<AppLanguage, Record<string, string>> = {
          'Fakkiin iskiriinii hanga, guyyaa fi ID daldalaa ifatti akka agarsiisu mirkaneessi.',
       'home.footer.cta': 'Chaanaalii Telegiraamiitti makamaa',
       'home.footer.copyright':
-         '© 2024 Faayinaansii Luusiid. Mirgi hunduu kan eegamedha.',
+         '© 2025 Faayinaansii Luusiid. Mirgi hunduu kan eegamedha.',
       'home.footer.subtitle':
          "Beeksisa, yaadannoo gadhiifamuu, fi piroomoo haaraa akkuma lafa bu'een qabachuuf gara chaanaalii ofiisalaa keenyaatti utaaluu.",
       'home.footer.title':
@@ -685,7 +685,7 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       'home.cta2.body':
          'በትንሽ ጥቅሎች ይጀምሩ ወይም ሁሉንም ነገር በፕሮ እና አልትራ ይክፈቱ። የኢንቨስትመንት ጉዞዎ አሁን ይጀምራል።',
       'home.cta2.button': 'የዋጋ ተመን ይመልከቱ',
-      'home.footer': '© 2024 ቪአይፒ ኢንቨስት. ሁሉም መብቶች የተጠበቁ ናቸው።.',
+      'home.footer': '© 2025 ቪአይፒ ኢንቨስት. ሁሉም መብቶች የተጠበቁ ናቸው።.',
       'packages.title': 'ቪአይፒ ኢንቨስትመንት',
       'packages.titleHighlight': 'ጥቅሎች',
       'packages.subtitle':
@@ -713,7 +713,7 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       paymentWarning:
          'ቅጽበታዊ ገጽ እይታው መጠኑን፣ ቀን እና የግብይት መታወቂያውን በግልፅ እንደሚያሳይ ያረጋግጡ።',
       'home.footer.cta': 'የቴሌግራም ቻናሉን ይቀላቀሉ',
-      'home.footer.copyright': '© 2024 ሉሲድ ፋይናንስ። መብቱ በህግ የተጠበቀ ነው።',
+      'home.footer.copyright': '© 2025 ሉሲድ ፋይናንስ። መብቱ በህግ የተጠበቀ ነው።',
       'home.footer.subtitle':
          'ማስታወቂያዎችን፣ የመልቀቅ ማስታወሻዎችን እና ትኩስ ማስተዋወቂያዎችን ልክ እንዳረፉ ለማግኘት ወደ ኦፊሴላዊ ቻናላችን ይግቡ።',
       'home.footer.title': 'ለዜና፣ ለብሎግ ጠብታዎች እና ለአዳዲስ ባህሪያት ቴሌግራማችንን ይቀላቀሉ',
