@@ -200,7 +200,7 @@ const Packages = () => {
                            )}
                            <br />
                            <a
-                              href="https://t.me/official_lucidfinance"
+                              href="https://t.me/lucidfinance_official"
                               target="_blank"
                               rel="noopener noreferrer"
                               className="font-semibold text-primary underline underline-offset-4 hover:opacity-80"

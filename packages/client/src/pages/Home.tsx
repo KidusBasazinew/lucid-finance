@@ -308,19 +308,6 @@ const Home = () => {
                </section>
             </main>
          </div>
-         {/* Footer */}
-         <footer className="border-t border-border py-12 bg-card">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-               <div className="text-center text-muted-foreground">
-                  <p>
-                     {t(
-                        'home.footer',
-                        '© 2024 VIP Invest. All rights reserved.'
-                     )}
-                  </p>
-               </div>
-            </div>
-         </footer>
       </>
    );
 };

@@ -13,6 +13,7 @@ import { Toaster as Sonner, Toaster } from '@/components/ui/sonner';
 import Home from './pages/Home';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { I18nProvider } from './i18n';
+import Footer from './components/Footer';
 
 const queryClient = new QueryClient();
 
@@ -72,6 +73,7 @@ const App = () => {
                      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                      {/* <Route path="*" element={<NotFound />} /> */}
                   </Routes>
+                  <Footer />
                </BrowserRouter>
             </TooltipProvider>
          </I18nProvider>

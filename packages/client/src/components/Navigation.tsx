@@ -15,12 +15,6 @@ import { useLogout, useMe } from '@/hooks/useAuth';
 import { useNavigate } from 'react-router';
 import { SidebarLink } from './SideBarLink';
 import { useI18n } from '@/i18n';
-import {
-   DropdownMenu,
-   DropdownMenuTrigger,
-   DropdownMenuContent,
-   DropdownMenuItem,
-} from '@/components/ui/dropdown-menu';
 
 const Navigation = () => {
    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -123,30 +117,23 @@ const Navigation = () => {
                            </Button>
                         </NavLink>
 
-                        <DropdownMenu>
-                           <DropdownMenuTrigger asChild>
+                        <div className="flex items-center gap-2 text-sm">
+                           {languages.map((l) => (
                               <Button
+                                 key={l.code}
                                  variant="ghost"
                                  size="sm"
-                                 className="flex items-center gap-2 text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                                 onClick={() => setLanguage(l.code)}
+                                 className={`px-3 py-1 rounded-full transition-colors ${
+                                    language === l.code
+                                       ? 'bg-zinc-800/70 text-white'
+                                       : 'text-zinc-400 hover:text-white hover:bg-zinc-800/50'
+                                 }`}
                               >
-                                 {language?.toUpperCase?.() ?? 'EN'}
+                                 {l.label}
                               </Button>
-                           </DropdownMenuTrigger>
-                           <DropdownMenuContent
-                              align="end"
-                              className="min-w-[10rem]"
-                           >
-                              {languages.map((l) => (
-                                 <DropdownMenuItem
-                                    key={l.code}
-                                    onClick={() => setLanguage(l.code)}
-                                 >
-                                    {l.label}
-                                 </DropdownMenuItem>
-                              ))}
-                           </DropdownMenuContent>
-                        </DropdownMenu>
+                           ))}
+                        </div>
 
                         <Button
                            variant="ghost"
@@ -256,34 +243,26 @@ const Navigation = () => {
                               <LogOut className="w-4 h-4" />
                               {t('nav.logout', 'Logout')}
                            </button>
-                           <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
+                           <div className="flex flex-col gap-2 pt-2">
+                              {languages.map((l) => (
                                  <Button
+                                    key={l.code}
                                     variant="ghost"
                                     size="sm"
-                                    className="w-full justify-start text-zinc-400 hover:text-white hover:bg-zinc-800/40"
+                                    onClick={() => {
+                                       setLanguage(l.code);
+                                       setMobileMenuOpen(false);
+                                    }}
+                                    className={`w-full justify-start px-4 py-2 rounded-lg ${
+                                       language === l.code
+                                          ? 'bg-zinc-800/70 text-white'
+                                          : 'text-zinc-400 hover:text-white hover:bg-zinc-800/40'
+                                    }`}
                                  >
-                                    {languages.find((l) => l.code === language)
-                                       ?.label ?? 'English'}
+                                    {l.label}
                                  </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent
-                                 align="start"
-                                 className="min-w-[10rem]"
-                              >
-                                 {languages.map((l) => (
-                                    <DropdownMenuItem
-                                       key={l.code}
-                                       onClick={() => {
-                                          setLanguage(l.code);
-                                          setMobileMenuOpen(false);
-                                       }}
-                                    >
-                                       {l.label}
-                                    </DropdownMenuItem>
-                                 ))}
-                              </DropdownMenuContent>
-                           </DropdownMenu>
+                              ))}
+                           </div>
                         </div>
                      </>
                   ) : (
@@ -304,34 +283,26 @@ const Navigation = () => {
                               {t('nav.getStarted', 'Get Started')}
                            </Button>
                         </NavLink>
-                        <DropdownMenu>
-                           <DropdownMenuTrigger asChild>
+                        <div className="flex flex-col gap-2 pt-2">
+                           {languages.map((l) => (
                               <Button
+                                 key={l.code}
                                  variant="ghost"
                                  size="sm"
-                                 className="w-full justify-start text-zinc-400 hover:text-white hover:bg-zinc-800/40"
+                                 onClick={() => {
+                                    setLanguage(l.code);
+                                    setMobileMenuOpen(false);
+                                 }}
+                                 className={`w-full justify-start px-4 py-2 rounded-lg ${
+                                    language === l.code
+                                       ? 'bg-zinc-800/70 text-white'
+                                       : 'text-zinc-400 hover:text-white hover:bg-zinc-800/40'
+                                 }`}
                               >
-                                 {languages.find((l) => l.code === language)
-                                    ?.label ?? 'English'}
+                                 {l.label}
                               </Button>
-                           </DropdownMenuTrigger>
-                           <DropdownMenuContent
-                              align="start"
-                              className="min-w-[10rem]"
-                           >
-                              {languages.map((l) => (
-                                 <DropdownMenuItem
-                                    key={l.code}
-                                    onClick={() => {
-                                       setLanguage(l.code);
-                                       setMobileMenuOpen(false);
-                                    }}
-                                 >
-                                    {l.label}
-                                 </DropdownMenuItem>
-                              ))}
-                           </DropdownMenuContent>
-                        </DropdownMenu>
+                           ))}
+                        </div>
                      </div>
                   )}
                </div>
