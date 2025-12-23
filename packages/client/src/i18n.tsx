@@ -240,6 +240,13 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       step4: 'Return to this page and click “I have paid — Confirm”.',
       paymentWarning:
          'Make sure the screenshot clearly shows the amount, date, and transaction ID.',
+      'home.footer.cta': 'Join the Telegram Channel',
+      'home.footer.copyright': '© 2024 Lucid Finance. All rights reserved.',
+      'home.footer.subtitle':
+         'Hop into our official channel to catch announcements, release notes, and fresh promos as soon as they land.',
+      'home.footer.title':
+         'Join our Telegram for news, blog drops, and new features',
+      'home.footer.tag': 'Stay ahead with Lucid Finance',
    },
    om: {
       'nav.dashboard': 'Daashboordii',
@@ -469,6 +476,14 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       step4: 'Gara fuula kanaatti deebi’aatii “I have paid — Confirm” cuqaasaa.',
       paymentWarning:
          'Fakkiin iskiriinii hanga, guyyaa fi ID daldalaa ifatti akka agarsiisu mirkaneessi.',
+      'home.footer.cta': 'Chaanaalii Telegiraamiitti makamaa',
+      'home.footer.copyright':
+         '© 2024 Faayinaansii Luusiid. Mirgi hunduu kan eegamedha.',
+      'home.footer.subtitle':
+         "Beeksisa, yaadannoo gadhiifamuu, fi piroomoo haaraa akkuma lafa bu'een qabachuuf gara chaanaalii ofiisalaa keenyaatti utaaluu.",
+      'home.footer.title':
+         'Oduu, kufaatii biloogii, fi wantoota haaraa argachuuf Telegiraamii keenyatti makamaa',
+      'home.footer.tag': "Luciid Faayinaansii waliin fuulduratti ta'aa",
    },
    ah: {
       'nav.dashboard': 'ዳሽቦርድ',
@@ -697,6 +712,12 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       step4: 'ወደዚህ ገጽ ይመለሱ እና "እኔ ከፍያለሁ - አረጋግጥ" ን ጠቅ ያድርጉ።',
       paymentWarning:
          'ቅጽበታዊ ገጽ እይታው መጠኑን፣ ቀን እና የግብይት መታወቂያውን በግልፅ እንደሚያሳይ ያረጋግጡ።',
+      'home.footer.cta': 'የቴሌግራም ቻናሉን ይቀላቀሉ',
+      'home.footer.copyright': '© 2024 ሉሲድ ፋይናንስ። መብቱ በህግ የተጠበቀ ነው።',
+      'home.footer.subtitle':
+         'ማስታወቂያዎችን፣ የመልቀቅ ማስታወሻዎችን እና ትኩስ ማስተዋወቂያዎችን ልክ እንዳረፉ ለማግኘት ወደ ኦፊሴላዊ ቻናላችን ይግቡ።',
+      'home.footer.title': 'ለዜና፣ ለብሎግ ጠብታዎች እና ለአዳዲስ ባህሪያት ቴሌግራማችንን ይቀላቀሉ',
+      'home.footer.tag': 'ከሉሲድ ፋይናንስ ጋር ይቀጥሉ',
    },
 };
 

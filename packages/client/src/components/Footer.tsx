@@ -37,7 +37,7 @@ const Footer = () => {
                <p className="text-xs text-muted-foreground mt-4">
                   {t(
                      'home.footer.copyright',
-                     '© 2024 VIP Invest. All rights reserved.'
+                     '© 2024 Lucid Finance. All rights reserved.'
                   )}
                </p>
             </div>
