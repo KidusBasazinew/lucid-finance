@@ -233,7 +233,7 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       dialogIntro:
          'Follow the steps below to complete your payment using TeleBirr',
       step1: 'Open TeleBirr and send the payment to the following number:',
-      telebirrNumber: '0940414255',
+      telebirrNumber: '0942404155',
       step2: 'Take a screenshot of the payment confirmation.',
       step3: 'Open Telegram and send the screenshot to the following user:',
       telegramUser: '@lucidfinance',
@@ -469,7 +469,7 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       dialogIntro:
          'Follow the steps below to complete your payment using TeleBirr',
       step1: 'TeleBirr banuun kaffaltii lakkoofsa armaan gadii kanaan ergaa:',
-      telebirrNumber: '0940414255',
+      telebirrNumber: '0942404155',
       step2: 'Mirkaneessa kaffaltii sanaa suuraa iskiriinii fudhadhaa.',
       step3: 'Telegram banuun suuraa iskiriinii fayyadamaa armaan gadiitti ergaa:',
       telegramUser: '@lucidfinance',
@@ -705,7 +705,7 @@ const translations: Record<AppLanguage, Record<string, string>> = {
       'packages.dialogConfirm': 'ከፍያለው  — አረጋግጥ',
       dialogIntro: 'ቴሌቢርን ከፍተው ክፍያውን በሚከተለው ቁጥር ይላኩ።',
       step1: 'Open TeleBirr and send the payment to the following number:',
-      telebirrNumber: '0940414255',
+      telebirrNumber: '0942404155',
       step2: 'የክፍያ ማረጋገጫውን ቅጽበታዊ ገጽ እይታ ያንሱ።',
       step3: 'ቴሌግራም ይክፈቱ እና ስክሪፕቱን ለሚከተለው ተጠቃሚ ይላኩ።',
       telegramUser: '@lucidfinance',

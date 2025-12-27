@@ -176,7 +176,7 @@ const Packages = () => {
                            )}
                            <br />
                            <span className="font-semibold text-lg">
-                              {t('packages.telebirrNumber', '0940414255')}
+                              {t('packages.telebirrNumber', '0942404155')}
                            </span>
                         </p>
                      </div>
