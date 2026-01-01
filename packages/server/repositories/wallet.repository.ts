@@ -1,4 +1,5 @@
 import { prisma } from '../lib/prisma';
+import { investmentRepository } from './investment.repository';
 
 export const walletRepository = {
    findByUserId(userId: string) {
@@ -13,6 +14,7 @@ export const walletRepository = {
    },
    async increaseBalance(userId: string, amountCents: number) {
       await this.ensureWallet(userId);
+      await investmentRepository.ensureActiveInvestmentForUser(userId);
       return prisma.wallet.update({
          where: { userId },
          data: { balanceCents: { increment: amountCents } },
@@ -20,6 +22,7 @@ export const walletRepository = {
    },
    async decreaseBalance(userId: string, amountCents: number) {
       await this.ensureWallet(userId);
+      await investmentRepository.ensureActiveInvestmentForUser(userId);
       return prisma.wallet.update({
          where: { userId },
          data: { balanceCents: { decrement: amountCents } },

@@ -1,4 +1,5 @@
 import { prisma } from '../lib/prisma';
+import { investmentRepository } from '../repositories/investment.repository';
 
 // Allowed prize values (in Birr) - mirror the client wheel sectors
 const ALLOWED_WHEEL_AMOUNTS_BIRR = new Set([
@@ -19,6 +20,9 @@ export const wheelService = {
          err.status = 400;
          throw err;
       }
+
+      // Ensure the user has an active approved investment before claiming
+      await investmentRepository.ensureActiveInvestmentForUser(userId);
 
       const amountCents = amountBirr * 100;
       const reference = `WHEEL-${userId}`;
@@ -91,6 +95,9 @@ export const wheelService = {
    // Reserve the wheel when user spins: mark as claimed/reserved with 0 cents
    async reserveOnSpin(userId: string) {
       const now = new Date();
+      // Ensure user has an active approved investment before allowing a spin
+      await investmentRepository.ensureActiveInvestmentForUser(userId);
+
       return prisma.user.updateMany({
          where: { id: userId, wheelRewardClaimed: false } as any,
          data: {

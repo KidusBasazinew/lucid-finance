@@ -15,24 +15,12 @@ import PackageCard from '@/components/PackageCard';
 import { usePackages } from '@/hooks/usePackages';
 import Navigation from '@/components/Navigation';
 import { useI18n } from '@/i18n';
-import { useState } from 'react';
-import { isAuthenticated } from '@/lib/auth';
-import { useMe } from '@/hooks/useAuth';
-import { useMyWallet } from '@/hooks/useWallet';
-import { useInvestments } from '@/hooks/useInvestments';
-import { PuzzleWheelDialog } from './PuzzleWheel';
 
 const Home = () => {
    const { t } = useI18n();
    const { data: pkg } = usePackages({ page: 1, limit: 50, active: true });
    const items = pkg?.data ?? [];
    const router = useNavigate();
-   const [wheelOpen, setWheelOpen] = useState(false);
-   const authed = isAuthenticated();
-   const { data: me } = useMe(authed);
-   const { data: wallet } = useMyWallet();
-   const { data: investments } = useInvestments({ page: 1, limit: 1 });
-   const alreadyClaimed = Boolean((me as any)?.wheelRewardClaimed);
    const formatMoney = (cents: number) => (cents / 100).toLocaleString();
    console.log(items);
    const benefits = [
@@ -70,31 +58,10 @@ const Home = () => {
       },
    ];
 
-   const openSpinner = () => setWheelOpen(true);
-
-   // Show spinner if: authed, not claimed, and (wallet balance > 0 or has investments)
-   const hasPositiveBalance = (wallet?.balanceCents ?? 0) > 0;
-   const hasInvestment =
-      Array.isArray(investments?.data) && investments.data.length > 0;
-
    return (
       <>
-         <div className="relative min-h-screen bg-[#09090b] text-white overflow-hidden">
-            {authed &&
-               !alreadyClaimed &&
-               (hasPositiveBalance || hasInvestment) && (
-                  <div className="fixed top-20 left-10 z-50 cursor-pointer pointer-events-auto">
-                     <img
-                        src="/coin.png"
-                        className="w-10 h-10 animate-pulse cursor-pointer"
-                        onClick={openSpinner}
-                        alt="Spin Wheel"
-                     />
-                  </div>
-               )}
+         <div className="min-h-screen bg-[#09090b] text-white overflow-hidden">
             <Navigation />
-
-            <PuzzleWheelDialog open={wheelOpen} onOpenChange={setWheelOpen} />
             {/* Animated gradient mesh background */}
             <div className="fixed inset-0 pointer-events-none">
                <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-violet-600/20 rounded-full blur-[120px] animate-pulse" />

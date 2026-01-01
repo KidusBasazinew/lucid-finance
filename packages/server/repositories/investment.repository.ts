@@ -8,6 +8,18 @@ export const investmentRepository = {
    findById(id: string) {
       return prisma.investment.findUnique({ where: { id } });
    },
+   async ensureActiveInvestmentForUser(userId: string) {
+      const inv = await prisma.investment.findFirst({
+         where: {
+            userId,
+            status: 'ACTIVE',
+         },
+      });
+      if (!inv) {
+         throw new Error('Active investment required');
+      }
+      return inv;
+   },
    async listByUser(
       userId: string,
       params: {
