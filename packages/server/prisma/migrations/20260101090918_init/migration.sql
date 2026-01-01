@@ -5,7 +5,7 @@ CREATE TYPE "Role" AS ENUM ('USER', 'ADMIN');
 CREATE TYPE "UserStatus" AS ENUM ('ACTIVE', 'SUSPENDED');
 
 -- CreateEnum
-CREATE TYPE "InvestmentStatus" AS ENUM ('ACTIVE', 'COMPLETED', 'CANCELLED');
+CREATE TYPE "InvestmentStatus" AS ENUM ('ACTIVE', 'COMPLETED', 'CANCELLED', 'PENDING');
 
 -- CreateEnum
 CREATE TYPE "TransactionType" AS ENUM ('DEPOSIT', 'WITHDRAWAL', 'PROFIT', 'REFERRAL');
@@ -26,6 +26,9 @@ CREATE TABLE "User" (
     "lastName" TEXT,
     "referralCode" TEXT NOT NULL,
     "referredById" TEXT,
+    "wheelRewardClaimed" BOOLEAN NOT NULL DEFAULT false,
+    "wheelRewardCents" INTEGER NOT NULL DEFAULT 0,
+    "wheelRewardClaimedAt" TIMESTAMP(3),
     "role" "Role" NOT NULL DEFAULT 'USER',
     "status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -75,6 +78,7 @@ CREATE TABLE "Investment" (
     "status" "InvestmentStatus" NOT NULL DEFAULT 'ACTIVE',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "lastProfitDate" TIMESTAMPTZ(6),
 
     CONSTRAINT "Investment_pkey" PRIMARY KEY ("id")
 );
@@ -139,10 +143,10 @@ ALTER TABLE "User" ADD CONSTRAINT "User_referredById_fkey" FOREIGN KEY ("referre
 ALTER TABLE "Wallet" ADD CONSTRAINT "Wallet_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Investment" ADD CONSTRAINT "Investment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Investment" ADD CONSTRAINT "Investment_packageId_fkey" FOREIGN KEY ("packageId") REFERENCES "Package"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Investment" ADD CONSTRAINT "Investment_packageId_fkey" FOREIGN KEY ("packageId") REFERENCES "Package"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Investment" ADD CONSTRAINT "Investment_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Transaction" ADD CONSTRAINT "Transaction_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

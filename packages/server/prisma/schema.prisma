@@ -18,6 +18,9 @@ model User {
   lastName      String?
   referralCode  String        @unique
   referredById  String?
+  wheelRewardClaimed   Boolean   @default(false)
+  wheelRewardCents     Int       @default(0)
+  wheelRewardClaimedAt DateTime?
   role          Role          @default(USER)
   status        UserStatus    @default(ACTIVE)
   createdAt     DateTime      @default(now())
